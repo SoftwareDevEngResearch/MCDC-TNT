@@ -20,12 +20,12 @@ current implemented physics:
 import numpy as np
 
 
-import kernals.SourceParticles
-import kernals.Advance
-import kernals.SampleEvent
-import kernals.FissionsAdd
-import kernals.CleanUp
-import kernals.Scatter
+import kernels.SourceParticles
+import kernels.Advance
+import kernels.SampleEvent
+import kernels.FissionsAdd
+import kernels.CleanUp
+import kernels.Scatter
 
 
 #===============================================================================
