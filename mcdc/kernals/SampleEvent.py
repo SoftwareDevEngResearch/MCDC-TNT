@@ -18,6 +18,8 @@ def SampleEvent(p_mesh_cell, p_event, p_alive, mesh_cap_xsec, mesh_scat_xsec, me
     
     for i in range(num_part):
         if p_alive[i] == True:
+            
+            
             event_rand = np.random.random()
             
             #scatter?

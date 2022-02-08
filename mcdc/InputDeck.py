@@ -8,7 +8,7 @@ Date: Dec 2nd 2021
 """
 
 import numpy as np
-
+import ymal
 
 def SimulationSetup():
     #===============================================================================
@@ -30,7 +30,7 @@ def SimulationSetup():
     Lenght_slab = 1
     surface_distances = np.array([0,Lenght_slab], dtype=np.float32)
     
-    mesh_cell_length = 0.1 #dx
+    mesh_cell_length = 0.01 #dx
     N_mesh = int(Lenght_slab/mesh_cell_length)
     
     cap_xsec = 1/3 #capture crossection
