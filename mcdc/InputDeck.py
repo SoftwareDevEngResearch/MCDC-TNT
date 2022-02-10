@@ -29,7 +29,7 @@ def SimulationSetup(input_file):
     # Test case 1: Single Reigon
     #===============================================================================
     
-    Lenght_slab = np.float(inputs['length of slab'])
+    Length_slab = np.float(inputs['length of slab'])
     surface_distances = np.array(inputs['surface locations'])
     
     mesh_cell_length = np.float(inputs['dx']) #dx
