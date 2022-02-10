@@ -68,7 +68,7 @@ def SimulationSetup(input_file):
     #assemble formatted dicts for simplified i/o
     comp_parms = {'seed': seed, 'hard_targ': hardware_target}
     sim_perams = {'num': num_part,
-                  'L_slab': Lenght_slab,
+                  'L_slab': Length_slab,
                   'dx': mesh_cell_length,
                   'N_mesh': N_mesh,
                   'nu': nu_new_neutrons,
