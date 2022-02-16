@@ -88,7 +88,7 @@ def SimulationSetup(input_file):
     # #abs_xsec = cap_xsec+fis_xsec #absorption crossection
     # total_xsec = np.array([1,1,1]) #total crossection
     
-    # Lenght_slab = 5
+    # Length_slab = 5
     # surface_distances = np.array([0,2,4,Lenght_slab], dtype=np.float32)
     # mesh_cell_length = 0.2 #dx
     # N_mesh = int(Lenght_slab/mesh_cell_length)
