@@ -8,22 +8,18 @@ Date: Dec 2nd 2021
 import math
 import numpy as np
 
-@profile
+
 def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
             num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, L):
     kicker = 1e-10
     for i in range(num_part):
-        #print("particle {0} is now in transport".format(i))
-        
         
         flag = 1
         while (flag == 1):
             if (p_pos_x[i] < 0): #exited rhs
                 flag = 0
-                #print("1")
             elif (p_pos_x[i] >= L): #exited lhs
                 flag = 0
-                #print("2")
                 
             else:
                 dist = -math.log(np.random.random()) / mesh_total_xsec[p_mesh_cell[i]]
@@ -46,7 +42,6 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
                     dist_traveled = dist
                     flag = 0
                     cell_next = p_mesh_cell[i]
-                    #print("5")
                     
                 p_pos_x[i] += p_dir_x[i]*dist_traveled
                 p_pos_y[i] += p_dir_y[i]*dist_traveled

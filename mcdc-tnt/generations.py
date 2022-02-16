@@ -17,7 +17,7 @@ current implemented physics:
 # sys.path.append('/home/jack/Documents/testbed/serial/kernels/')
 import numpy as np
 
-import pp_kernels as kernels
+import numba_kernels.cpu as kernels
 #import pp_kernels.SourceParticles as SourceParticles
 #import pp_kernels.Advance as Advance
 #import pp_kernels.SampleEvent as SampleEvent
@@ -135,34 +135,34 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     phase_parts = 5*num_part #see note about data storage
     
     # Position
-    p_pos_x = np.zeros(phase_parts, dtype=np.float32)
-    p_pos_y = np.zeros(phase_parts, dtype=np.float32)
-    p_pos_z = np.zeros(phase_parts, dtype=np.float32)
+    p_pos_x = np.zeros(phase_parts, dtype=float)
+    p_pos_y = np.zeros(phase_parts, dtype=float)
+    p_pos_z = np.zeros(phase_parts, dtype=float)
     
     # Direction
-    p_dir_x = np.zeros(phase_parts, dtype=np.float32)
-    p_dir_y = np.zeros(phase_parts, dtype=np.float32)
-    p_dir_z = np.zeros(phase_parts, dtype=np.float32)
+    p_dir_x = np.zeros(phase_parts, dtype=float)
+    p_dir_y = np.zeros(phase_parts, dtype=float)
+    p_dir_z = np.zeros(phase_parts, dtype=float)
     
     # Speed
-    p_speed = np.zeros(phase_parts, dtype=np.float32)
+    p_speed = np.zeros(phase_parts, dtype=float)
     
     # Time
-    p_time = np.zeros(phase_parts, dtype=np.float32)
+    p_time = np.zeros(phase_parts, dtype=float)
     
     # Region
     p_mesh_cell = np.zeros(phase_parts, dtype=int)
     
     # Flags
     p_alive = np.full(phase_parts, False, dtype=bool)
-    p_event = np.zeros(phase_parts, dtype=np.uint8)
+    p_event = np.zeros(phase_parts, dtype=int)
     
     #mesh_particle_index = np.zeros([N_mesh, phase_parts], dtype=np.uint8)
     
     
-    scatter_event_index = np.zeros(phase_parts, dtype=np.uint8)
-    capture_event_index = np.zeros(phase_parts, dtype=np.uint8)
-    fission_event_index = np.zeros(phase_parts, dtype=np.uint8)
+    scatter_event_index = np.zeros(phase_parts, dtype=int)
+    capture_event_index = np.zeros(phase_parts, dtype=int)
+    fission_event_index = np.zeros(phase_parts, dtype=int)
     
     
     [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, 
@@ -172,6 +172,8 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
                                                       p_speed, p_time, p_alive,
                                                       num_part, meshwise_fission_pdf,
                                                       particle_speed, sim_perams['iso'])
+    
+    print(p_pos_x.dtype)
     
     #===============================================================================
     # Generation Loop
