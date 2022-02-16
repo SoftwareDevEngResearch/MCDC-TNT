@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Created on Tue Jan 25 11:19:50 2022
 
@@ -7,7 +5,7 @@ Created on Tue Jan 25 11:19:50 2022
 """
 
 import generations
-from InputDeck import SimulationSetup
+from input_parser import SimulationSetup
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
@@ -35,11 +33,15 @@ def run():
 
     x_mesh = np.linspace(0,1,len(scalar_flux))
 
+    scalar_flux /= np.max(scalar_flux)
+    standard_deviation_flux /= np.max(standard_deviation_flux)
+    
     plt.figure(1)
-    plt.plot(x_mesh, scalar_flux, '-b')
+    plt.plot(x_mesh, scalar_flux, '-b', x_mesh, standard_deviation_flux, '--k')
     plt.title("Scalar Flux: ", )
     plt.ylabel("$\phi [cm^{-2}s^{-1}]$")
     plt.xlabel("x [cm]")
+    plt.show()
 
 
 if __name__ == "__main__":

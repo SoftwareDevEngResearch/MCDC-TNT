@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Name: Advance
 breif: inputdeck for MCDC-TNT
@@ -10,6 +8,7 @@ Date: Dec 2nd 2021
 import math
 import numpy as np
 
+@profile
 def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
             num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, L):
     kicker = 1e-10

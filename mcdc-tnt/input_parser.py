@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Name: InputDeck
 breif: inputdeck for MCDC-TNT
@@ -29,11 +27,11 @@ def SimulationSetup(input_file):
     # Test case 1: Single Reigon
     #===============================================================================
     
-    Lenght_slab = np.float(inputs['length of slab'])
+    Length_slab = np.float(inputs['length of slab'])
     surface_distances = np.array(inputs['surface locations'])
     
     mesh_cell_length = np.float(inputs['dx']) #dx
-    N_mesh = int(Lenght_slab/mesh_cell_length)
+    N_mesh = int(Length_slab/mesh_cell_length)
     
     cap_xsec = np.float(inputs['capture cross section']) #capture crossection
     scat_xsec = np.float(inputs['scatter cross section'])  #scattering crossection
@@ -68,7 +66,7 @@ def SimulationSetup(input_file):
     #assemble formatted dicts for simplified i/o
     comp_parms = {'seed': seed, 'hard_targ': hardware_target}
     sim_perams = {'num': num_part,
-                  'L_slab': Lenght_slab,
+                  'L_slab': Length_slab,
                   'dx': mesh_cell_length,
                   'N_mesh': N_mesh,
                   'nu': nu_new_neutrons,
