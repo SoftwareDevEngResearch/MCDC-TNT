@@ -10,7 +10,7 @@ import numpy as np
 import numba as nb
 
 
-@nb.jit(nopython=True, parallel=True) 
+@nb.jit(nopython=True,) 
 def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
             num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, L):
     
@@ -20,15 +20,13 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
     
     while end_trans == 0:
         pre_p_mesh_cell = p_mesh_cell
-        p_dist = np.zeros(num_part)
+        
         
         pre_end_trans_vec = end_trans_vec
         
-        for i in nb.prange(num_part):
-            [p_pos_x[i], p_pos_y[i], p_pos_z[i], p_mesh_cell[i], p_time[i],
-            p_dist[i], end_trans_vec[i]] = AdvanceParticle(p_pos_x[i], p_pos_y[i], p_pos_z[i], p_mesh_cell[i], dx,
-                                    p_dir_y[i], p_dir_z[i], p_dir_x[i], p_speed[i], p_time[i],
-                                    mesh_total_xsec, end_trans_vec[i], L)
+        [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_time, p_dist, end_trans_vec] = AdvanceParticleRun(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx,
+                                    p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
+                                    mesh_total_xsec, end_trans_vec, L, num_part)
         
         for i in range(num_part):
             if (pre_end_trans_vec[i] == 0):
@@ -40,6 +38,20 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
     
     
     return(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared)
+
+@nb.jit(nopython=True, parallel=True) 
+def AdvanceParticleRun(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx,
+                                    p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
+                                    mesh_total_xsec, end_trans_vec, L, num_part):
+    p_dist = np.zeros(num_part)
+    for i in nb.prange(num_part):
+            [p_pos_x[i], p_pos_y[i], p_pos_z[i], p_mesh_cell[i], p_time[i],
+            p_dist[i], end_trans_vec[i]] = AdvanceParticle(p_pos_x[i], p_pos_y[i], p_pos_z[i], p_mesh_cell[i], dx,
+                                    p_dir_y[i], p_dir_z[i], p_dir_x[i], p_speed[i], p_time[i],
+                                    mesh_total_xsec, end_trans_vec[i], L)
+                                    
+    return(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_time, p_dist, end_trans_vec)
+
 
 @nb.jit(nopython=True) 
 def AdvanceParticle(x, y, z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
