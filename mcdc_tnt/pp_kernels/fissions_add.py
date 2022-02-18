@@ -8,7 +8,6 @@ import numpy as np
 
 def FissionsAdd(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive,
                 fis_count, nu_new_neutrons, fission_event_index, num_part, particle_speed, rands):
-    
     k=0 #index for fission temp vectors
     for i in range(fis_count):
         for j in range(nu_new_neutrons):
@@ -44,6 +43,8 @@ def FissionsAdd(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_
             
     
     return(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive, k)
+    
+    
     
 
 def test_FissionsAdd():
