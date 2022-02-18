@@ -16,15 +16,15 @@ def FissionsAdd(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_
             p_pos_x[k+num_part] = p_pos_x[fission_event_index[i]]
             p_mesh_cell[k+num_part] = p_mesh_cell[fission_event_index[i]]
             p_pos_y[k+num_part] = p_pos_y[fission_event_index[i]]
-            p_pos_z[k+num_part] = p_pos_x[fission_event_index[i]]
+            p_pos_z[k+num_part] = p_pos_z[fission_event_index[i]]
             
             # print("fission particle produced")
             # print("from particle {0} and indexed as particle {1}".format(fission_event_index[i], k+num_part))
             # print("produced at: {0}".format(p_pos_x[k+num_part]))
             # Direction
             # Sample polar and azimuthal angles uniformly
-            mu  = 2.0*rands[i+j] - 1.0
-            azi = 2.0*rands[i+j+1]
+            mu  = 2.0*rands[4*i+2*j] - 1.0
+            azi = 2.0*rands[4*i+2*j+1]
             # Convert to Cartesian coordinate
             c = (1.0 - mu**2)**0.5
             p_dir_y[k+num_part] = np.cos(azi)*c
@@ -44,3 +44,49 @@ def FissionsAdd(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_
             
     
     return(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive, k)
+    
+
+def test_FissionsAdd():
+    
+    L = 1
+    dx = .25
+    N_m = 4
+    
+    num_part = 3
+    p_pos_x = np.array([.55, 3, 5])
+    p_pos_y = np.array([10, 3, 5])
+    p_pos_z = np.array([15, 3, 5])
+    
+    p_mesh_cell = np.array([2, 87, -1])
+    
+    p_dir_x = np.ones(num_part)
+    p_dir_y = np.zeros(num_part)
+    p_dir_z = np.zeros(num_part)
+    
+    p_speed = np.ones(num_part)
+    p_time = np.zeros(num_part)
+    p_alive = np.ones(num_part, bool)
+    p_alive[0] = False
+    
+    fis_count = 1
+    nu = 2
+    fission_event_index = [0]
+    
+    rands = [1,1,1,1]
+    
+    [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive, k] = FissionsAdd(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive, fis_count, nu, fission_event_index, 1, 1, rands)
+    
+    print(p_pos_x)
+    print(p_pos_y)
+    print(p_pos_z)
+    
+    assert(np.allclose(p_pos_x, [0.55, 0.55, 0.55]))
+    assert(np.allclose(p_pos_y, [10,10,10]))
+    assert(np.allclose(p_pos_z, [15,15,15]))
+    assert(p_dir_x.all() == 1)
+    assert(p_alive[1:2].all() == True)
+    
+    
+if __name__ == '__main__':
+    test_FissionsAdd()
+    
