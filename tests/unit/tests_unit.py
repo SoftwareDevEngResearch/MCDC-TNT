@@ -42,6 +42,8 @@ def test_SourceParticles():
     assert (p_alive.all() == True)
     assert (p_pos_x.all() > .2)
 
+
+
 def test_SampleEvent():
     p_mesh_cell = np.array([0,1,0,5])
     p_alive = [True,True,True,False]
@@ -69,7 +71,21 @@ def test_SampleEvent():
     assert (fission_event_index[0] == 2)
     assert (scatter_event_index[0] == 0)
         
-if __name__ == '__main__':
-    test_SampleEvent()
+        
+        
+def test_StillIn():    
+    
+    num_part = 7
+    surface_distances = [0,.25,.75,1]
+    p_pos_x = np.array([-.01, 0, .1544, .2257, .75, 1.1, 1])
+    p_alive = np.ones(num_part, bool)
+    
+    [p_alive, tally_left, tally_right] = StillIn(p_pos_x, surface_distances, p_alive, num_part)
+    
+    assert(p_alive[0] == False)
+    assert(p_alive[5] == False)
+    assert(tally_left == 2)
+    assert(tally_right == 2)
+    assert(p_alive[2:4].all() == True)
     
     
