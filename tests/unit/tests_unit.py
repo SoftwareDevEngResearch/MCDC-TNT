@@ -89,3 +89,37 @@ def test_StillIn():
     assert(p_alive[2:4].all() == True)
     
     
+def test_BOYD():
+    
+    num_part = 3
+    
+    p_pos_x = [1,2,3]
+    p_pos_y = [1,2,3]
+    p_pos_z = [1,2,3]
+    
+    p_mesh_cell = [1,2,3]
+    
+    p_dir_x = [1,2,3]
+    p_dir_y = [1,2,3]
+    p_dir_z = [1,2,3]
+    
+    p_speed = [1,2,3]
+    p_time = [1,2,3]
+    p_alive = [False,True,False]
+    
+    
+    [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive, kept] = BringOutYourDead(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive, num_part)
+    
+    assert(kept == 1)
+    assert(p_dir_x[0] == 2)
+    assert(p_dir_y[0] == 2)
+    assert(p_dir_z[0] == 2)
+    
+    assert(p_pos_x[0] == 2)
+    assert(p_pos_y[0] == 2)
+    assert(p_pos_z[0] == 2)
+    
+    assert(p_speed[0] == 2)
+    assert(p_time[0] == 2)
+    assert(p_alive[0] == True)
+    
