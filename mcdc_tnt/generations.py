@@ -155,7 +155,6 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     
     # Flags
     p_alive = np.full(phase_parts, False, dtype=bool)
-    p_event = np.zeros(phase_parts, dtype=int)
     
     #mesh_particle_index = np.zeros([N_mesh, phase_parts], dtype=np.uint8)
     

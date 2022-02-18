@@ -126,10 +126,6 @@ def test_StillIn():
     
     [p_alive, tally_left, tally_right] = StillIn(p_pos_x, surface_distances, p_alive, num_part)
     
-    print(tally_left)
-    print(tally_right)
-    print(p_alive[1:4])
-    
     assert(p_alive[0] == False)
     assert(p_alive[5] == False)
     assert(tally_left == 2)
