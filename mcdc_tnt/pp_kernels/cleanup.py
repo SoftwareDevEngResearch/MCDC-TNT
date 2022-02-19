@@ -8,6 +8,42 @@ Date: Dec 2nd 2021
 
 
 def BringOutYourDead(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive, num_part):
+    """
+    Removes particles that died in the last round of particle transport by
+    rewriting there postiion with the alive ones
+    
+    Parameters
+    ----------
+    p_pos_x : vector double
+        PSV: x position of phase space particles (index is particle value).
+    p_pos_y : vector double
+        PSV: y position of phase space particles (index is particle value).
+    p_pos_z : vector double
+        PSV: z position of phase space particles (index is particle value).
+    p_mesh_cell : vector int
+        PSV: mesh cell location of a given particle.
+    p_dir_y : vector double
+        PSV: y direction unit value of phase space particles (index is particle value).
+    p_dir_z : vector double
+         PSV: z direction unit value of phase space particles (index is particle value).
+    p_dir_x : vector double
+         PSV: x direction unit value of phase space particles (index is particle value).
+    p_speed : vector double
+        PSV: speed (energy) or a particle (index is particle).
+    p_time : vector double
+        PSV: particle clock.
+    p_alive : vector bool
+        PSV: is it alive?
+    num_part : int
+        number of particles currently under transport (indxed form 1).
+
+
+
+    Returns
+    -------
+    PSV ready for next itteration of lifer cycle
+
+    """
     kept = 0
     for i in range(num_part):
         if p_alive[i] == True:

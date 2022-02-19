@@ -8,6 +8,39 @@ import numpy as np
 
 
 def SampleEvent(p_mesh_cell, p_alive, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, scatter_event_index, capture_event_index, fission_event_index, num_part, nu_new_neutrons, rands):
+    """
+    Samples the next events of particles under transport
+
+    Parameters
+    ----------
+    p_mesh_cell : vector int
+        PSV: mesh cell location of a given particle.
+    p_alive : vector bool
+        PSV: is it alive?
+    mesh_cap_xsec : vector double
+        vector containing capturew cross sections that is the length of the number of cells.
+    mesh_scat_xsec : vector double
+        DESCRIPTION.
+    mesh_fis_xsec : vector double
+        DESCRIPTION.
+    scatter_event_index : vector int
+        records the location in the PSV of the scatter events.
+    capture_event_index : vector int
+        records the location in the PSV of capture events.
+    fission_event_index : vector int
+        records the location in the PSV of fission events.
+    num_part : int
+        number of particles currently under transport (indxed form 1).
+    nu_new_neutrons : int
+        number of neutrons produced per fission event.
+    rands : vector double
+        produced from an rng, needs to be num_part long.
+
+    Returns
+    -------
+    Index vectors of particle next operations.
+
+    """
     fissions_to_add = 0
     scat_count = 0
     cap_count = 0

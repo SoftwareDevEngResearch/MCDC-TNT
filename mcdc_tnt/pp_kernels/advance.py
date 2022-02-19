@@ -11,6 +11,47 @@ import numpy as np
 
 def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
             num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, L):
+    """
+    
+
+    Parameters
+    ----------
+    p_pos_x : TYPE
+        DESCRIPTION.
+    p_pos_y : TYPE
+        DESCRIPTION.
+    p_pos_z : TYPE
+        DESCRIPTION.
+    p_mesh_cell : TYPE
+        DESCRIPTION.
+    dx : TYPE
+        DESCRIPTION.
+    p_dir_y : TYPE
+        DESCRIPTION.
+    p_dir_z : TYPE
+        DESCRIPTION.
+    p_dir_x : TYPE
+        DESCRIPTION.
+    p_speed : TYPE
+        DESCRIPTION.
+    p_time : TYPE
+        DESCRIPTION.
+    num_part : TYPE
+        DESCRIPTION.
+    mesh_total_xsec : TYPE
+        DESCRIPTION.
+    mesh_dist_traveled : TYPE
+        DESCRIPTION.
+    mesh_dist_traveled_squared : TYPE
+        DESCRIPTION.
+    L : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
+    """
     kicker = 1e-10
     for i in range(num_part):
         

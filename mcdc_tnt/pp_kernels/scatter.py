@@ -9,6 +9,29 @@ import math
 import numpy as np
 
 def Scatter(scatter_indices, scat_count, p_dir_x, p_dir_y, p_dir_z, rands):
+    """
+    
+
+    Parameters
+    ----------
+    scatter_indices : vector int
+        Indicies to PSV of particls that will be undergoing transport.
+    scat_count : TYPE
+        DESCRIPTION.
+    p_dir_x : TYPE
+        DESCRIPTION.
+    p_dir_y : TYPE
+        DESCRIPTION.
+    p_dir_z : TYPE
+        DESCRIPTION.
+    rands : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
+    """
 
     for i in range(scat_count):
 
