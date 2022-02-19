@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Name: InputDeck
 breif: inputdeck for MCDC-TNT

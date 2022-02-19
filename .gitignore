@@ -51,6 +51,10 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
+# profiler data
+*.prof
+*.lprof
+
 # Translations
 *.mo
 *.pot
