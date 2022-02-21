@@ -12,44 +12,45 @@ import numpy as np
 def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
             num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, L):
     """
-    
+    Guts of transport is the function that actaully moves particles around, go figure.
+    Implements surface tracking with flux (w/ error) via track length estimator
 
     Parameters
     ----------
-    p_pos_x : TYPE
-        DESCRIPTION.
-    p_pos_y : TYPE
-        DESCRIPTION.
-    p_pos_z : TYPE
-        DESCRIPTION.
-    p_mesh_cell : TYPE
-        DESCRIPTION.
-    dx : TYPE
-        DESCRIPTION.
-    p_dir_y : TYPE
-        DESCRIPTION.
-    p_dir_z : TYPE
-        DESCRIPTION.
-    p_dir_x : TYPE
-        DESCRIPTION.
-    p_speed : TYPE
-        DESCRIPTION.
-    p_time : TYPE
-        DESCRIPTION.
-    num_part : TYPE
-        DESCRIPTION.
-    mesh_total_xsec : TYPE
-        DESCRIPTION.
-    mesh_dist_traveled : TYPE
-        DESCRIPTION.
+    p_pos_x : vector double
+        PSV: x position of phase space particles (index is particle value).
+    p_pos_y : vector double
+        PSV: y position of phase space particles (index is particle value).
+    p_pos_z : vector double
+        PSV: z position of phase space particles (index is particle value).
+    p_mesh_cell : vector int
+        PSV: mesh cell location of a given particle.
+    dx : double
+        mesh cell width.
+    p_dir_y : vector double
+        PSV: y direction unit value of phase space particles (index is particle value).
+    p_dir_z : vector double
+         PSV: z direction unit value of phase space particles (index is particle value).
+    p_dir_x : vector double
+         PSV: x direction unit value of phase space particles (index is particle value).
+    p_speed : vector double
+        PSV: speed (energy) or a particle (index is particle).
+    p_time : vector double
+        PSV: particle clock.
+    num_part : int
+        number of particles currently under transport.
+    mesh_total_xsec : vector double
+        total cross section of every mesh cell (length num_cells).
+    mesh_dist_traveled : vector double
+        track length estimator tally for use in comp of flux.
     mesh_dist_traveled_squared : TYPE
-        DESCRIPTION.
-    L : TYPE
-        DESCRIPTION.
+        distance a particle travels in each cell for use in error with flux.
+    L : double
+        length of slab.
 
     Returns
     -------
-    None.
+    Updated PSV with mesh distances.
 
     """
     kicker = 1e-10

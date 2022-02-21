@@ -10,22 +10,22 @@ import numpy as np
 
 def Scatter(scatter_indices, scat_count, p_dir_x, p_dir_y, p_dir_z, rands):
     """
-    
+    Isotropically chosses new particle directions after a scatter event
 
     Parameters
     ----------
     scatter_indices : vector int
         Indicies to PSV of particls that will be undergoing transport.
-    scat_count : TYPE
-        DESCRIPTION.
-    p_dir_x : TYPE
-        DESCRIPTION.
-    p_dir_y : TYPE
-        DESCRIPTION.
-    p_dir_z : TYPE
-        DESCRIPTION.
-    rands : TYPE
-        DESCRIPTION.
+    scat_count : int
+        number of particles to scatter.
+    p_dir_y : vector double
+        PSV: y direction unit value of phase space particles (index is particle value).
+    p_dir_z : vector double
+         PSV: z direction unit value of phase space particles (index is particle value).
+    p_dir_x : vector double
+         PSV: x direction unit value of phase space particles (index is particle value).
+    rands : vector doubles
+        from an rng, length: 2*scat_count.
 
     Returns
     -------
