@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="mcdc-tnt",
+    name="mcdc_tnt",
     version="0.1",
-    packages=find_packages(include=["mcdc-tnt", "mcdc-tnt.*"]),
+    packages=find_packages(include=["mcdc_tnt", "mcdc_tnt.*"]),
     include_package_data=True
 )
