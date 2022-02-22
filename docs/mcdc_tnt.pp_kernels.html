@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mcdc_tnt.pp_kernels package &mdash; MCDC-TNT  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> MCDC-TNT
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">mcdc_tnt.pp_kernels package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-mcdc_tnt.pp_kernels.advance">mcdc_tnt.pp_kernels.advance module</a></li>
+<li><a class="reference internal" href="#module-mcdc_tnt.pp_kernels.cleanup">mcdc_tnt.pp_kernels.cleanup module</a></li>
+<li><a class="reference internal" href="#module-mcdc_tnt.pp_kernels.fissions_add">mcdc_tnt.pp_kernels.fissions_add module</a></li>
+<li><a class="reference internal" href="#module-mcdc_tnt.pp_kernels.sample_event">mcdc_tnt.pp_kernels.sample_event module</a></li>
+<li><a class="reference internal" href="#module-mcdc_tnt.pp_kernels.scatter">mcdc_tnt.pp_kernels.scatter module</a></li>
+<li><a class="reference internal" href="#module-mcdc_tnt.pp_kernels.source_particles">mcdc_tnt.pp_kernels.source_particles module</a></li>
+<li><a class="reference internal" href="#module-mcdc_tnt.pp_kernels">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MCDC-TNT</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>mcdc_tnt.pp_kernels package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/mcdc_tnt.pp_kernels.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="mcdc-tnt-pp-kernels-package">
+<h1>mcdc_tnt.pp_kernels package<a class="headerlink" href="#mcdc-tnt-pp-kernels-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-mcdc_tnt.pp_kernels.advance">
+<span id="mcdc-tnt-pp-kernels-advance-module"></span><h2>mcdc_tnt.pp_kernels.advance module<a class="headerlink" href="#module-mcdc_tnt.pp_kernels.advance" title="Permalink to this headline">¶</a></h2>
+<p>Name: Advance
+breif: inputdeck for MCDC-TNT
+Author: Jackson Morgan (OR State Univ - <a class="reference external" href="mailto:morgjack&#37;&#52;&#48;oregonstate&#46;edu">morgjack<span>&#64;</span>oregonstate<span>&#46;</span>edu</a>) CEMeNT
+Date: Dec 2nd 2021</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.advance.Advance">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.advance.</span></span><span class="sig-name descname"><span class="pre">Advance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_pos_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_pos_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_pos_z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_mesh_cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_part</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh_total_xsec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh_dist_traveled</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh_dist_traveled_squared</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.advance.Advance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Guts of transport is the function that actaully moves particles around, go figure.
+Implements surface tracking with flux (w/ error) via track length estimator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_pos_x</strong> (<em>vector double</em>) – PSV: x position of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_pos_y</strong> (<em>vector double</em>) – PSV: y position of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_pos_z</strong> (<em>vector double</em>) – PSV: z position of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_mesh_cell</strong> (<em>vector int</em>) – PSV: mesh cell location of a given particle.</p></li>
+<li><p><strong>dx</strong> (<em>double</em>) – mesh cell width.</p></li>
+<li><p><strong>p_dir_y</strong> (<em>vector double</em>) – PSV: y direction unit value of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_dir_z</strong> (<em>vector double</em>) – PSV: z direction unit value of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_dir_x</strong> (<em>vector double</em>) – PSV: x direction unit value of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_speed</strong> (<em>vector double</em>) – PSV: speed (energy) or a particle (index is particle).</p></li>
+<li><p><strong>p_time</strong> (<em>vector double</em>) – PSV: particle clock.</p></li>
+<li><p><strong>num_part</strong> (<em>int</em>) – number of particles currently under transport.</p></li>
+<li><p><strong>mesh_total_xsec</strong> (<em>vector double</em>) – total cross section of every mesh cell (length num_cells).</p></li>
+<li><p><strong>mesh_dist_traveled</strong> (<em>vector double</em>) – track length estimator tally for use in comp of flux.</p></li>
+<li><p><strong>mesh_dist_traveled_squared</strong> (<em>TYPE</em>) – distance a particle travels in each cell for use in error with flux.</p></li>
+<li><p><strong>L</strong> (<em>double</em>) – length of slab.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Updated PSV with mesh distances.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.advance.StillIn">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.advance.</span></span><span class="sig-name descname"><span class="pre">StillIn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_pos_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_distances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_alive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_part</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.advance.StillIn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.advance.test_Advance">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.advance.</span></span><span class="sig-name descname"><span class="pre">test_Advance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.advance.test_Advance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.advance.test_StillIn">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.advance.</span></span><span class="sig-name descname"><span class="pre">test_StillIn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.advance.test_StillIn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-mcdc_tnt.pp_kernels.cleanup">
+<span id="mcdc-tnt-pp-kernels-cleanup-module"></span><h2>mcdc_tnt.pp_kernels.cleanup module<a class="headerlink" href="#module-mcdc_tnt.pp_kernels.cleanup" title="Permalink to this headline">¶</a></h2>
+<p>Name: CleanUp
+breif: Misc functions for MCDC-TNT
+Author: Jackson Morgan (OR State Univ - <a class="reference external" href="mailto:morgjack&#37;&#52;&#48;oregonstate&#46;edu">morgjack<span>&#64;</span>oregonstate<span>&#46;</span>edu</a>) CEMeNT
+Date: Dec 2nd 2021</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.cleanup.BringOutYourDead">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.cleanup.</span></span><span class="sig-name descname"><span class="pre">BringOutYourDead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_pos_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_pos_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_pos_z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_mesh_cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_alive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_part</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.cleanup.BringOutYourDead" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes particles that died in the last round of particle transport by
+rewriting there postiion with the alive ones</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_pos_x</strong> (<em>vector double</em>) – PSV: x position of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_pos_y</strong> (<em>vector double</em>) – PSV: y position of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_pos_z</strong> (<em>vector double</em>) – PSV: z position of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_mesh_cell</strong> (<em>vector int</em>) – PSV: mesh cell location of a given particle.</p></li>
+<li><p><strong>p_dir_y</strong> (<em>vector double</em>) – PSV: y direction unit value of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_dir_z</strong> (<em>vector double</em>) – PSV: z direction unit value of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_dir_x</strong> (<em>vector double</em>) – PSV: x direction unit value of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_speed</strong> (<em>vector double</em>) – PSV: speed (energy) or a particle (index is particle).</p></li>
+<li><p><strong>p_time</strong> (<em>vector double</em>) – PSV: particle clock.</p></li>
+<li><p><strong>p_alive</strong> (<em>vector bool</em>) – PSV: is it alive?</p></li>
+<li><p><strong>num_part</strong> (<em>int</em>) – number of particles currently under transport (indxed form 1).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>PSV ready for next itteration of lifer cycle</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.cleanup.test_BOYD">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.cleanup.</span></span><span class="sig-name descname"><span class="pre">test_BOYD</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.cleanup.test_BOYD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-mcdc_tnt.pp_kernels.fissions_add">
+<span id="mcdc-tnt-pp-kernels-fissions-add-module"></span><h2>mcdc_tnt.pp_kernels.fissions_add module<a class="headerlink" href="#module-mcdc_tnt.pp_kernels.fissions_add" title="Permalink to this headline">¶</a></h2>
+<p>Name: FissionsAdd
+breif: Adding fission particles to phase vectors for MCDC-TNT
+Author: Jackson Morgan (OR State Univ - <a class="reference external" href="mailto:morgjack&#37;&#52;&#48;oregonstate&#46;edu">morgjack<span>&#64;</span>oregonstate<span>&#46;</span>edu</a>) CEMeNT
+Date: Nov 18th 2021</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.fissions_add.FissionsAdd">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.fissions_add.</span></span><span class="sig-name descname"><span class="pre">FissionsAdd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_pos_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_pos_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_pos_z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_mesh_cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_alive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fis_count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu_new_neutrons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fission_event_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_part</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle_speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rands</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.fissions_add.FissionsAdd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run advance for a</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_pos_x</strong> (<em>vector double</em>) – PSV: x position of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_pos_y</strong> (<em>vector double</em>) – PSV: y position of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_pos_z</strong> (<em>vector double</em>) – PSV: z position of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_mesh_cell</strong> (<em>vector int</em>) – PSV: mesh cell location of a given particle.</p></li>
+<li><p><strong>p_dir_y</strong> (<em>vector double</em>) – PSV: y direction unit value of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_dir_z</strong> (<em>vector double</em>) – PSV: z direction unit value of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_dir_x</strong> (<em>vector double</em>) – PSV: x direction unit value of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_speed</strong> (<em>vector double</em>) – PSV: speed (energy) or a particle (index is particle).</p></li>
+<li><p><strong>p_time</strong> (<em>vector double</em>) – PSV: particle clock.</p></li>
+<li><p><strong>p_alive</strong> (<em>vector bool</em>) – PSV: is it alive?</p></li>
+<li><p><strong>fis_count</strong> (<em>int</em>) – how many fissions where recorded in smaple event.</p></li>
+<li><p><strong>nu_new_neutrons</strong> (<em>int</em>) – how many neutrons produced per fission.</p></li>
+<li><p><strong>fission_event_index</strong> (<em>vector int</em>) – indicies of particles that underwent fission after sample event.</p></li>
+<li><p><strong>num_part</strong> (<em>int</em>) – number of particles currently under transport (indxed form 1).</p></li>
+<li><p><strong>particle_speed</strong> (<em>double</em>) – speed of fissioned particles.</p></li>
+<li><p><strong>rands</strong> (<em>vector double</em>) – produced from an rng, needs to be fis_count*nu*2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Phase space variables with new fissions added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.fissions_add.test_FissionsAdd">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.fissions_add.</span></span><span class="sig-name descname"><span class="pre">test_FissionsAdd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.fissions_add.test_FissionsAdd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-mcdc_tnt.pp_kernels.sample_event">
+<span id="mcdc-tnt-pp-kernels-sample-event-module"></span><h2>mcdc_tnt.pp_kernels.sample_event module<a class="headerlink" href="#module-mcdc_tnt.pp_kernels.sample_event" title="Permalink to this headline">¶</a></h2>
+<p>Name: SampleEvent
+breif: Samples events for particles provided in a phase space for MCDC-TNT
+Author: Jackson Morgan (OR State Univ - <a class="reference external" href="mailto:morgjack&#37;&#52;&#48;oregonstate&#46;edu">morgjack<span>&#64;</span>oregonstate<span>&#46;</span>edu</a>) CEMeNT
+Date: Dec 2nd 2021</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.sample_event.SampleEvent">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.sample_event.</span></span><span class="sig-name descname"><span class="pre">SampleEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_mesh_cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_alive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh_cap_xsec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh_scat_xsec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh_fis_xsec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scatter_event_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capture_event_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fission_event_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_part</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu_new_neutrons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rands</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.sample_event.SampleEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples the next events of particles under transport</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p_mesh_cell</strong> (<em>vector int</em>) – PSV: mesh cell location of a given particle.</p></li>
+<li><p><strong>p_alive</strong> (<em>vector bool</em>) – PSV: is it alive?</p></li>
+<li><p><strong>mesh_cap_xsec</strong> (<em>vector double</em>) – vector containing capturew cross sections that is the length of the number of cells.</p></li>
+<li><p><strong>mesh_scat_xsec</strong> (<em>vector double</em>) – DESCRIPTION.</p></li>
+<li><p><strong>mesh_fis_xsec</strong> (<em>vector double</em>) – DESCRIPTION.</p></li>
+<li><p><strong>scatter_event_index</strong> (<em>vector int</em>) – records the location in the PSV of the scatter events.</p></li>
+<li><p><strong>capture_event_index</strong> (<em>vector int</em>) – records the location in the PSV of capture events.</p></li>
+<li><p><strong>fission_event_index</strong> (<em>vector int</em>) – records the location in the PSV of fission events.</p></li>
+<li><p><strong>num_part</strong> (<em>int</em>) – number of particles currently under transport (indxed form 1).</p></li>
+<li><p><strong>nu_new_neutrons</strong> (<em>int</em>) – number of neutrons produced per fission event.</p></li>
+<li><p><strong>rands</strong> (<em>vector double</em>) – produced from an rng, needs to be num_part long.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Index vectors of particle next operations.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.sample_event.test_SampleEvent">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.sample_event.</span></span><span class="sig-name descname"><span class="pre">test_SampleEvent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.sample_event.test_SampleEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-mcdc_tnt.pp_kernels.scatter">
+<span id="mcdc-tnt-pp-kernels-scatter-module"></span><h2>mcdc_tnt.pp_kernels.scatter module<a class="headerlink" href="#module-mcdc_tnt.pp_kernels.scatter" title="Permalink to this headline">¶</a></h2>
+<p>Name: Scatter
+breif: Adding fission particles to phase vectors for MCDC-TNT
+Author: Jackson Morgan (OR State Univ - <a class="reference external" href="mailto:morgjack&#37;&#52;&#48;oregonstate&#46;edu">morgjack<span>&#64;</span>oregonstate<span>&#46;</span>edu</a>) CEMeNT
+Date: Dec 2nd 2021</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.scatter.Scatter">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.scatter.</span></span><span class="sig-name descname"><span class="pre">Scatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scatter_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scat_count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rands</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.scatter.Scatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Isotropically chosses new particle directions after a scatter event</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scatter_indices</strong> (<em>vector int</em>) – Indicies to PSV of particls that will be undergoing transport.</p></li>
+<li><p><strong>scat_count</strong> (<em>int</em>) – number of particles to scatter.</p></li>
+<li><p><strong>p_dir_y</strong> (<em>vector double</em>) – PSV: y direction unit value of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_dir_z</strong> (<em>vector double</em>) – PSV: z direction unit value of phase space particles (index is particle value).</p></li>
+<li><p><strong>p_dir_x</strong> (<em>vector double</em>) – PSV: x direction unit value of phase space particles (index is particle value).</p></li>
+<li><p><strong>rands</strong> (<em>vector doubles</em>) – from an rng, length: 2*scat_count.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.scatter.test_Scatter">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.scatter.</span></span><span class="sig-name descname"><span class="pre">test_Scatter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.scatter.test_Scatter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-mcdc_tnt.pp_kernels.source_particles">
+<span id="mcdc-tnt-pp-kernels-source-particles-module"></span><h2>mcdc_tnt.pp_kernels.source_particles module<a class="headerlink" href="#module-mcdc_tnt.pp_kernels.source_particles" title="Permalink to this headline">¶</a></h2>
+<p>Name: CleanUp
+breif: Misc functions for MCDC-TNT
+Author: Jackson Morgan (OR State Univ - <a class="reference external" href="mailto:morgjack&#37;&#52;&#48;oregonstate&#46;edu">morgjack<span>&#64;</span>oregonstate<span>&#46;</span>edu</a>) CEMeNT
+Date: Dec 2nd 2021</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.source_particles.SourceParticles">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.source_particles.</span></span><span class="sig-name descname"><span class="pre">SourceParticles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p_pos_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_pos_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_pos_z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_mesh_cell</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_dir_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_alive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_parts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meshwise_fission_pdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle_speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isotropic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.source_particles.SourceParticles" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phase space perameters</strong> (<em>particle</em>) – p_pos_x : vector(float)
+p_pos_y : vector(float)
+p_pos_z : vector(float)
+p_region : vector(int)
+p_dir_y : vector(float)
+p_dir_z : vector(float)
+p_dir_x : vector(float)
+p_speed : vector(float)
+p_time : vector(float)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>problem geometry perameters</dt><dd><dl class="simple">
+<dt>num_part<span class="classifier">int</span></dt><dd><p>How many particles are there.</p>
+</dd>
+<dt>x_rhs_gen<span class="classifier">float</span></dt><dd><p>right hand limit of the generating region in slab geo.</p>
+</dd>
+<dt>x_lhs_gen<span class="classifier">float</span></dt><dd><p>left limit of the generating region in slab.</p>
+</dd>
+<dt>L_gen<span class="classifier">float</span></dt><dd><p>width of generating region.</p>
+</dd>
+<dt>generation_region<span class="classifier">int</span></dt><dd><p>index of generating region.</p>
+</dd>
+<dt>particle_speed<span class="classifier">float</span></dt><dd><p>particle speed.</p>
+</dd>
+<dt>isotropic<span class="classifier">Bool, optional</span></dt><dd><p>is the source isotropic or uniform. The default is True.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>All pahse space perameters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mcdc_tnt.pp_kernels.source_particles.test_SourceParticles">
+<span class="sig-prename descclassname"><span class="pre">mcdc_tnt.pp_kernels.source_particles.</span></span><span class="sig-name descname"><span class="pre">test_SourceParticles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mcdc_tnt.pp_kernels.source_particles.test_SourceParticles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-mcdc_tnt.pp_kernels">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-mcdc_tnt.pp_kernels" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2022, Jackson P. Morgan
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
