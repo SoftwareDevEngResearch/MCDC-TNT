@@ -8,6 +8,19 @@ import numpy as np
 import yaml
 
 def SimulationSetup(input_file):
+    """
+    Sets up dictionaries and mesh for transport
+
+    Parameters
+    ----------
+    input_file : <input_file_name>.yaml
+        Name of the input file to be ran.
+
+    Returns
+    -------
+    Inital PSV's for use in transport.
+
+    """
     
     with open(input_file,'r') as f:
         inputs = yaml.safe_load(f)    

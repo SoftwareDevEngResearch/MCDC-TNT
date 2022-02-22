@@ -18,70 +18,6 @@ current implemented physics:
 import numpy as np
 
 import mcdc_tnt.pp_kernels as kernels
-#import pp_kernels.SourceParticles as SourceParticles
-#import pp_kernels.Advance as Advance
-#import pp_kernels.SampleEvent as SampleEvent
-#import pp_kernels.FissionsAdd as FissionsAdd
-#import pp_kernels.CleanUp as CleanUp
-#import pp_kernels.Scatter as Scatter
-
-def import_case(hardware_target):
-    if (hardware_target == 'pp'): #pure python
-        import pp_kernels.SourceParticles as SourceParticles
-        import pp_kernels.Advance as Advance
-        import pp_kernels.SampleEvent as SampleEvent
-        import pp_kernels.FissionsAdd as FissionsAdd
-        import pp_kernels.CleanUp as CleanUp
-        import pp_kernels.Scatter as Scatter
-        print()
-        
-    elif (hardware_target == 'pyk_cpu'): #pykokkos CPU
-        import pp_kernels.SourceParticles as SourceParticles
-        import pp_kernels.Advance as Advance
-        import pp_kernels.SampleEvent as SampleEvent
-        import pp_kernels.FissionsAdd as FissionsAdd
-        import pp_kernels.CleanUp as CleanUp
-        import pp_kernels.Scatter as Scatter
-
-    elif (hardware_target == 'num_cpu'): #Numba CPU
-        import pp_kernels.SourceParticles as SourceParticles
-        import pp_kernels.Advance as Advance
-        import pp_kernels.SampleEvent as SampleEvent
-        import pp_kernels.FissionsAdd as FissionsAdd
-        import pp_kernels.CleanUp as CleanUp
-        import pp_kernels.Scatter as Scatter
-
-    elif (hardware_target == 'pyk_gpu'): #Pykokkos GPU
-        import pp_kernels.SourceParticles as SourceParticles
-        import pp_kernels.Advance as Advance
-        import pp_kernels.SampleEvent as SampleEvent
-        import pp_kernels.FissionsAdd as FissionsAdd
-        import pp_kernels.CleanUp as CleanUp
-        import pp_kernels.Scatter as Scatter
-
-    elif (hardware_target == 'num_gpu'): #Numba GPU
-        import pp_kernels.SourceParticles as SourceParticles
-        import pp_kernels.Advance as Advance
-        import pp_kernels.SampleEvent as SampleEvent
-        import pp_kernels.FissionsAdd as FissionsAdd
-        import pp_kernels.CleanUp as CleanUp
-        import pp_kernels.Scatter as Scatter
-
-    elif (hardware_target == 'te_cpu'): #TE CPU
-        import pp_kernels.SourceParticles as SourceParticles
-        import pp_kernels.Advance as Advance
-        import pp_kernels.SampleEvent as SampleEvent
-        import pp_kernels.FissionsAdd as FissionsAdd
-        import pp_kernels.CleanUp as CleanUp
-        import pp_kernels.Scatter as Scatter
-
-    elif (hardware_target == 'te_gpu'): #TE GPU
-        import pp_kernels.SourceParticles as SourceParticles
-        import pp_kernels.Advance as Advance
-        import pp_kernels.SampleEvent as SampleEvent
-        import pp_kernels.FissionsAdd as FissionsAdd
-        import pp_kernels.CleanUp as CleanUp
-        import pp_kernels.Scatter as Scatter
 
 #===============================================================================
 # Simulation Setup
@@ -94,7 +30,32 @@ def import_case(hardware_target):
 #===============================================================================
 
 def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, mesh_total_xsec, surface_distances):
-    
+    """
+    Runs a generation of transport. Eachone is launched in complete isolation of
+    another
+
+    Parameters
+    ----------
+    comp_parms : Python Dict
+        variables important for the computation (e.g. number of cores).
+    sim_perams : Python Dict
+        variables for simulation (e.g. num particles).
+    mesh_cap_xsec : vector double
+        capture x-sections for every mesh cell.
+    mesh_scat_xsec : vector double
+        scattering x-sections for every mesh cell.
+    mesh_fis_xsec : vector double
+        fission x-sections for every mesh cell.
+    mesh_total_xsec : vector double
+        total x-sections for every mesh cell.
+    surface_distances : vector double
+        location of material interfaces defining "regions".
+
+    Returns
+    -------
+    scalar flux and assocated errors.
+
+    """
     #import_case(comp_parms['hard_targ'])
     
     
@@ -196,7 +157,6 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         killed = 0
         alive_cycle_start = num_part
         
-        xi = np.random.random()
         [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared] = kernels.Advance(
                 p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
                 num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, surface_distances[len(surface_distances)-1])
