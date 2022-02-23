@@ -1,9 +1,3 @@
-"""
-Created on Tue Jan 25 11:19:50 2022
-
-@author: jack
-"""
-
 import generations
 from input_parser import SimulationSetup
 import matplotlib.pyplot as plt
@@ -13,6 +7,14 @@ import argparse
 
 
 def run():
+    """
+    main function to run a single generation and plot the output
+
+    Returns
+    -------
+    Plots and output tables if requested.
+
+    """
     parser = argparse.ArgumentParser(description='Main file to run MC/DC-TNT')
     parser.add_argument('-i', '--input', required=True,
                         help='input file in a .yaml format (see InputDeck.py)')

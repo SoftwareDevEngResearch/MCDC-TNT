@@ -1,20 +1,3 @@
-"""
-Name: Testbed_1
-breif: Event Based Transient MC for metaprograming exploration
-Author: Jackson Morgan (OR State Univ - morgjack@oregonstate.edu) CEMeNT
-Date: Dec 2nd 2021
-current implemented physics:
-        -slab geometry
-        -multiregion
-        -surface tracking
-        -track length estimator
-        -monoenergtic
-        -isotropic or uniform source direction
-        -fission/capture/scatter region
-        -purging the dead
-"""
-# import sys
-# sys.path.append('/home/jack/Documents/testbed/serial/kernels/')
 import numpy as np
 
 import mcdc_tnt.pp_kernels as kernels
