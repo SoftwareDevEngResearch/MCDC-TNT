@@ -116,7 +116,6 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
                                                       num_part, meshwise_fission_pdf,
                                                       particle_speed, sim_perams['iso'])
     
-    print(p_pos_x.dtype)
     
     #===============================================================================
     # Generation Loop
