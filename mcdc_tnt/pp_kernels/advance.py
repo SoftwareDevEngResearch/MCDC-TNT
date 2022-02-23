@@ -62,7 +62,6 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
                 flag = 0
             elif (p_pos_x[i] >= L): #exited lhs
                 flag = 0
-                
             else:
                 dist = -math.log(np.random.random()) / mesh_total_xsec[p_mesh_cell[i]]
                 
@@ -99,6 +98,48 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
     
     return(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared)
 
+
+def Advance_cycle(i, p_pos_x, p_pos_y, p_pos_z,
+        p_dir_y, p_dir_z, p_dir_x, 
+        p_mesh_cell, p_speed, p_time,  
+        dx, mesh_total_xsec, L
+        p_dist_travled, p_end_trans, rands)
+
+    kicker = 1e-10
+
+    if (p_end_trans[i] == 0):
+        if (p_pos_x[i] < 0): #exited rhs
+            p_end_trans[i] = 1
+        elif (p_pos_x[i] >= L): #exited lhs
+            p_end_trans[i] = 1
+            
+        else:
+            dist = -math.log(rands[i]) / mesh_total_xsec[p_mesh_cell[i]]
+            
+            x_loc = (p_dir_x[i] * dist) + p_pos_x[i]
+            LB = p_mesh_cell[i] * dx
+            RB = LB + dx
+            
+            if (x_loc < LB):        #move partilce into cell at left
+                p_dist_travled[i] = (LB - p_pos_x[i])/p_dir_x[i] + kicker
+                cell_next = p_mesh_cell[i] - 1
+               
+            elif (x_loc > RB):      #move particle into cell at right
+                p_dist_travled[i] = (RB - p_pos_x[i])/p_dir_x[i] + kicker
+                cell_next = p_mesh_cell[i] + 1
+                
+            else:                   #move particle in cell
+                p_dist_travled[i] = dist
+                p_end_trans[i] = 1
+                cell_next = p_mesh_cell[i]
+                
+            p_pos_x[i] += p_dir_x[i]*p_dist_travled[i]
+            p_pos_y[i] += p_dir_y[i]*p_dist_travled[i]
+            p_pos_z[i] += p_dir_z[i]*p_dist_travled[i]
+            
+            p_mesh_cell[i] = cell_next
+            p_time[i]  += p_dist_travled[i]/p_speed[i]
+    return
 
 
 def StillIn(p_pos_x, surface_distances, p_alive, num_part):

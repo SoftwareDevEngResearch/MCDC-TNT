@@ -57,7 +57,7 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
     space = pk.ExecutionSpace.OpenMP
     pk.set_default_space(space)
     
-    #this is only here while devloping eventually all variables will be in name space
+    #this is only here while devloping eventually all variables will views
     
     #allocate special data
     p_pos_x_pk: pk.View1D[pk.double] = pk.View([num_part], pk.double)
