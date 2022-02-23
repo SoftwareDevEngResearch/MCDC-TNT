@@ -1,6 +1,6 @@
 import numpy as np
 
-import mcdc_tnt.pp_kernels as kernels
+import pp_kernels as kernels
 
 #===============================================================================
 # Simulation Setup
