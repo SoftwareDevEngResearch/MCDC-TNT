@@ -225,7 +225,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         # print("")
         
         # print(max(p_mesh_cell[0:num_part]))
-    
+        g+=1
     #===============================================================================
     # Step Output
     #===============================================================================
@@ -256,7 +256,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     # print("total particles now alive and stored: {0}".format(num_part))
     
     # # alive_last = alive_now
-    # g+=1
+    
 
 
 if __name__ == '__main__':
