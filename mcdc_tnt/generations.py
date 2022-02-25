@@ -1,6 +1,6 @@
 import numpy as np
 
-import pp_kernels as kernels
+import numba_kernels.cpu as kernels
 
 #===============================================================================
 # Simulation Setup
