@@ -53,6 +53,142 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
     Updated PSV with mesh distances.
 
     """
+    p_end_trans = np.zeros(num_part)
+    end_flag = 0
+    max_mesh_index = len(mesh_total_xsec)-1
+    
+    cycle_count = 0
+    while end_flag == 0:
+        #allocate randoms
+        rands = np.random.random([num_part])
+        #vector of indicies for particle transport
+        
+        p_dist_travled = np.zeros(num_part)
+        
+        pre_p_mesh = p_mesh_cell
+        
+        for i in range(num_part):
+            Advance_cycle(i, p_pos_x, p_pos_y, p_pos_z,
+                          p_dir_y, p_dir_z, p_dir_x, 
+                          p_mesh_cell, p_speed, p_time,  
+                          dx, mesh_total_xsec, L,
+                          p_dist_travled, p_end_trans, rands)
+        
+        end_flag = 1
+        for i in range(num_part):
+            if (0 < pre_p_mesh[i] < max_mesh_index):
+                mesh_dist_traveled[pre_p_mesh[i]] += p_dist_travled[i]
+                mesh_dist_traveled_squared[pre_p_mesh[i]] += p_dist_travled[i]**2
+                
+            if p_end_trans[i] == 0:
+                end_flag = 0
+        
+        if (cycle_count > int(1e6)):
+            print("************ERROR**********")
+            print(" Max itter hit")
+            print(p_end_trans)
+            print()
+            print()
+            return()
+            
+        summer = p_end_trans.sum()
+        cycle_count += 1
+        print("Advance Complete:......{1}%       ".format(cycle_count, int(100*summer/num_part)), end = "\r")
+    print()
+        
+      
+    
+    return(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared)
+
+
+
+
+def Advance_cycle(i, p_pos_x, p_pos_y, p_pos_z,
+                  p_dir_y, p_dir_z, p_dir_x, 
+                  p_mesh_cell, p_speed, p_time,  
+                  dx, mesh_total_xsec, L,
+                  p_dist_travled, p_end_trans, rands):
+
+    kicker = 1e-10
+
+    if (p_end_trans[i] == 0):
+        if (p_pos_x[i] < 0): #exited rhs
+            p_end_trans[i] = 1
+        elif (p_pos_x[i] >= L): #exited lhs
+            p_end_trans[i] = 1
+            
+        else:
+            dist = -math.log(rands[i]) / mesh_total_xsec[p_mesh_cell[i]]
+            
+            x_loc = (p_dir_x[i] * dist) + p_pos_x[i]
+            LB = p_mesh_cell[i] * dx
+            RB = LB + dx
+            
+            if (x_loc < LB):        #move partilce into cell at left
+                p_dist_travled[i] = (LB - p_pos_x[i])/p_dir_x[i] + kicker
+                cell_next = p_mesh_cell[i] - 1
+               
+            elif (x_loc > RB):      #move particle into cell at right
+                p_dist_travled[i] = (RB - p_pos_x[i])/p_dir_x[i] + kicker
+                cell_next = p_mesh_cell[i] + 1
+                
+            else:                   #move particle in cell
+                p_dist_travled[i] = dist
+                p_end_trans[i] = 1
+                cell_next = p_mesh_cell[i]
+                
+            p_pos_x[i] += p_dir_x[i]*p_dist_travled[i]
+            p_pos_y[i] += p_dir_y[i]*p_dist_travled[i]
+            p_pos_z[i] += p_dir_z[i]*p_dist_travled[i]
+            
+            p_mesh_cell[i] = cell_next
+            p_time[i]  += p_dist_travled[i]/p_speed[i]
+
+
+
+
+
+def Advance_old(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
+            num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, L):
+    """
+    Guts of transport is the function that actaully moves particles around, go figure.
+    Implements surface tracking with flux (w/ error) via track length estimator
+    Parameters
+    ----------
+    p_pos_x : vector double
+        PSV: x position of phase space particles (index is particle value).
+    p_pos_y : vector double
+        PSV: y position of phase space particles (index is particle value).
+    p_pos_z : vector double
+        PSV: z position of phase space particles (index is particle value).
+    p_mesh_cell : vector int
+        PSV: mesh cell location of a given particle.
+    dx : double
+        mesh cell width.
+    p_dir_y : vector double
+        PSV: y direction unit value of phase space particles (index is particle value).
+    p_dir_z : vector double
+         PSV: z direction unit value of phase space particles (index is particle value).
+    p_dir_x : vector double
+         PSV: x direction unit value of phase space particles (index is particle value).
+    p_speed : vector double
+        PSV: speed (energy) or a particle (index is particle).
+    p_time : vector double
+        PSV: particle clock.
+    num_part : int
+        number of particles currently under transport.
+    mesh_total_xsec : vector double
+        total cross section of every mesh cell (length num_cells).
+    mesh_dist_traveled : vector double
+        track length estimator tally for use in comp of flux.
+    mesh_dist_traveled_squared : TYPE
+        distance a particle travels in each cell for use in error with flux.
+    L : double
+        length of slab.
+    Returns
+    -------
+    Updated PSV with mesh distances.
+    """
     kicker = 1e-10
     for i in range(num_part):
         
@@ -147,6 +283,7 @@ def test_Advance():
     
     mesh_dist_traveled_squared = np.zeros(N_m)
     mesh_dist_traveled = np.zeros(N_m)
+    
     
     [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared] = Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, L)
     

@@ -1,23 +1,6 @@
-"""
-Name: Testbed_1
-breif: Event Based Transient MC for metaprograming exploration
-Author: Jackson Morgan (OR State Univ - morgjack@oregonstate.edu) CEMeNT
-Date: Dec 2nd 2021
-current implemented physics:
-        -slab geometry
-        -multiregion
-        -surface tracking
-        -track length estimator
-        -monoenergtic
-        -isotropic or uniform source direction
-        -fission/capture/scatter region
-        -purging the dead
-"""
-# import sys
-# sys.path.append('/home/jack/Documents/testbed/serial/kernels/')
 import numpy as np
 
-import mcdc_tnt.pp_kernels as kernels
+import pp_kernels as kernels
 
 #===============================================================================
 # Simulation Setup
@@ -133,7 +116,6 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
                                                       num_part, meshwise_fission_pdf,
                                                       particle_speed, sim_perams['iso'])
     
-    print(p_pos_x.dtype)
     
     #===============================================================================
     # Generation Loop
@@ -243,7 +225,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         # print("")
         
         # print(max(p_mesh_cell[0:num_part]))
-    
+        g+=1
     #===============================================================================
     # Step Output
     #===============================================================================
@@ -274,7 +256,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     # print("total particles now alive and stored: {0}".format(num_part))
     
     # # alive_last = alive_now
-    # g+=1
+    
 
 
 if __name__ == '__main__':

@@ -7,11 +7,16 @@ Welcome to MCDC-TNT's documentation!
 ====================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
     modules
 
+.. toctree::
+   :maxdepth: 2
+   
+   :caption: Theroy 2:
+        markdown_pages/theroy.md
 
 Indices and tables
 ==================

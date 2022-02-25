@@ -1,9 +1,3 @@
-"""
-Name: InputDeck
-breif: inputdeck for MCDC-TNT
-Author: Jackson Morgan (OR State Univ - morgjack@oregonstate.edu) CEMeNT
-"""
-
 import numpy as np
 import yaml
 
