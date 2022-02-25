@@ -6,8 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
-#pykokkos directory trees
-pyk_cpp/
+#pykokkos directory trees with compiled files
+pk_cpp/
 
 # Distribution / packaging
 .Python

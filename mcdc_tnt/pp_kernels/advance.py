@@ -91,12 +91,12 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
             print()
             return()
             
-            
+        summer = p_end_trans.sum()
         cycle_count += 1
-        print(cycle_count)
+        print("Advance Complete:......{1}%       ".format(cycle_count, int(100*summer/num_part)), end = "\r")
+    print()
         
-    print(cycle_count-1)
-    #(p_end_flag == 0).all()
+      
     
     return(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared)
 
