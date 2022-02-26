@@ -1,4 +1,5 @@
 import numpy as np
+import numba as nb
 
 import numba_kernels.cpu as kernels
 
@@ -12,6 +13,7 @@ import numba_kernels.cpu as kernels
 # EVENT 0 : Sample particle sources
 #===============================================================================
 
+#@nb.jit(nopython=True)
 def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, mesh_total_xsec, surface_distances):
     """
     Runs a generation of transport. Eachone is launched in complete isolation of
