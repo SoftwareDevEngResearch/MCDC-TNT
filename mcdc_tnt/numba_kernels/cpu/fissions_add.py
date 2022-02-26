@@ -5,7 +5,10 @@ Author: Jackson Morgan (OR State Univ - morgjack@oregonstate.edu) CEMeNT
 Date: Nov 18th 2021
 """
 import numpy as np
+import numba as nb
 
+
+@nb.jit(nopython=True)
 def FissionsAdd(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive,
                 fis_count, nu_new_neutrons, fission_event_index, num_part, particle_speed, rands):
     """

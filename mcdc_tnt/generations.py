@@ -160,6 +160,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         [scatter_event_index, scat_count, capture_event_index, cap_count, fission_event_index, fis_count] = kernels.SampleEvent(
                 p_mesh_cell, p_alive, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, scatter_event_index,
                 capture_event_index, fission_event_index, num_part, nu_new_neutrons, rands)
+       
         
         fissions_to_add = (fis_count)*nu_new_neutrons
         

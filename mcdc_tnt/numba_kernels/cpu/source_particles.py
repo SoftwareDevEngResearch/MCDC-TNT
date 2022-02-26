@@ -6,7 +6,10 @@ Date: Dec 2nd 2021
 """
 
 import numpy as np
+import numba as nb
 
+
+@nb.jit(nopython=True, parallel=True)
 def SourceParticles(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive,
         num_parts, meshwise_fission_pdf, particle_speed, isotropic=True):
     """
@@ -45,7 +48,7 @@ def SourceParticles(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z
     All pahse space perameters.
     """
     
-    for i in range(num_parts):
+    for i in nb.prange(num_parts):
         # Position
         
         #find mesh cell birth based on provided pdf

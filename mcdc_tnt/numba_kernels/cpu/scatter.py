@@ -7,7 +7,9 @@ Date: Dec 2nd 2021
 
 import math
 import numpy as np
+import numba as nb
 
+@nb.jit(nopython=True, parallel=True)
 def Scatter(scatter_indices, scat_count, p_dir_x, p_dir_y, p_dir_z, rands):
     """
     Isotropically chosses new particle directions after a scatter event
@@ -33,7 +35,7 @@ def Scatter(scatter_indices, scat_count, p_dir_x, p_dir_y, p_dir_z, rands):
 
     """
 
-    for i in range(scat_count):
+    for i in nb.prange(scat_count):
 
         # Sample polar and azimuthal angles uniformly
         mu  = 2.0*rands[2*i] - 1.0
