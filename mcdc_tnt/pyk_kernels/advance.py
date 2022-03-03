@@ -10,7 +10,8 @@ def Advance_cycle(i: int,
             p_mesh_cell: pk.View1D[pk.int32], p_speed: pk.View1D[pk.double], p_time: pk.View1D[pk.double],  
             dx: pk.double, mesh_total_xsec: pk.View1D[pk.float], L: pk.double,
             p_dist_travled: pk.View1D[pk.double], p_end_trans: pk.View1D[int], rands: pk.View1D[pk.double]):
-    #pk.printf('%d   %f\n',i, p_pos_x[i])
+    #pk.printf('%d\n', i)
+    #pk.printf('%d   %d     %f\n',i,p_mesh_cell[i], p_pos_x[i])
     
     kicker: pk.double = 1e-8
    
@@ -79,7 +80,7 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
     p_dir_z_pk = pk.from_numpy(p_dir_z)
     p_dir_x_pk = pk.from_numpy(p_dir_x)
     
-    print(p_mesh_cell.dtype)
+    #print(p_mesh_cell.dtype)
     p_mesh_cell_pk = pk.from_numpy(p_mesh_cell)
     
     p_speed_pk = pk.from_numpy(p_speed)
@@ -115,7 +116,8 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
     while end_flag == 0:
         #allocate randoms
         summer = 0
-        rands = pk.from_numpy(np.random.random([num_part]))
+        rands_np = np.random.random([num_part])
+        rands = pk.from_numpy(rands_np)
         #vector of indicies for particle transport
         
         p = pk.RangePolicy(pk.get_default_space(), 0, num_part)
@@ -130,7 +132,6 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
         #print(type(L))
         #print(type(dx))
         
-        #print('made it')
         pk.parallel_for(num_part, Advance_cycle,
                         p_pos_x=p_pos_x_pk, p_pos_y=p_pos_y_pk, p_pos_z=p_pos_z_pk,
                         p_dir_y=p_dir_y_pk, p_dir_z=p_dir_z_pk, p_dir_x=p_dir_x_pk,
