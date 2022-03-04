@@ -45,16 +45,18 @@ def Advance_cycle(i: int,
                 p_end_trans[i] = 1
               
             #pk.printf('%d:  x pos before step     %f\n', i, p_pos_x[i])
-            p_pos_x[i] = p_dir_x[i]*p_dist_travled[i] + p_pos_x[i]
+            #p_pos_x[i] = p_dir_x[i]*p_dist_travled[i] + p_pos_x[i]
+            hmx: pk.double = p_dir_x[i]*p_dist_travled[i]
+            Move(i=i, to_move=p_pos_x, how_much=hmx)
             p_pos_y[i] = p_dir_y[i]*p_dist_travled[i] + p_pos_y[i]
             p_pos_z[i] = p_dir_z[i]*p_dist_travled[i] + p_pos_z[i]
             
             #pk.printf('%d:  x pos after step:     %f       should be: %f\n', i, p_pos_x[i], (temp_x))
             p_time[i]  += dist/p_speed[i]
 
-#@pk.workunit
-#def move(int: i, to_move: pk.View1D[pk.double], how_much: pk.double):
-#    to_move[i] += how_much
+@pk.workunit
+def Move(int: i, to_move: pk.View1D[pk.double], how_much: pk.double):
+    to_move[i] += how_much
     
 
 #def pk2np(pkarr, nparr):
