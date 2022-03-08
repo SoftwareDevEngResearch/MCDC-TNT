@@ -1,8 +1,9 @@
 import numpy as np
-#import numba as nb
+import numba as nb
+import pykokkos as pk
 
-#import numba_kernels.cpu as kernels
 import pyk_kernels as kernels
+
 #===============================================================================
 # Simulation Setup
 #===============================================================================
@@ -59,7 +60,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     np.random.seed(comp_parms['seed'])
     
     init_particle = num_part
-    meshwise_fission_pdf = np.zeros(N_mesh, dtype=float)
+    meshwise_fission_pdf = np.zeros(N_mesh, dtype=np.float32)
     
     total_mesh_fission_xsec = sum(mesh_fis_xsec)
     for cell in range(N_mesh):
@@ -97,8 +98,8 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     p_time = np.zeros(phase_parts, dtype=float)
     
     # Region
-    p_mesh_cell = np.zeros(phase_parts, dtype=np.int32)
-    #print(p_mesh_cell.dtype)
+    p_mesh_cell = np.zeros(phase_parts, dtype=int)
+    
     # Flags
     p_alive = np.full(phase_parts, False, dtype=bool)
     

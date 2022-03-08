@@ -7,10 +7,11 @@ import pykokkos as pk
 def Advance_cycle(i: int,
             p_pos_x: pk.View1D[pk.double], p_pos_y: pk.View1D[pk.double], p_pos_z: pk.View1D[pk.double],
             p_dir_y: pk.View1D[pk.double], p_dir_z: pk.View1D[pk.double], p_dir_x: pk.View1D[pk.double], 
-            p_mesh_cell: pk.View1D[int], p_speed: pk.View1D[pk.double], p_time: pk.View1D[pk.double],  
-            dx: pk.double, mesh_total_xsec: pk.View1D[pk.double], L: pk.double,
+            p_mesh_cell: pk.View1D[pk.int32], p_speed: pk.View1D[pk.double], p_time: pk.View1D[pk.double],  
+            dx: pk.double, mesh_total_xsec: pk.View1D[pk.float], L: pk.double,
             p_dist_travled: pk.View1D[pk.double], p_end_trans: pk.View1D[int], rands: pk.View1D[pk.double]):
-    #pk.printf('%d   %f\n',i, p_pos_x[i])
+    #pk.printf('%d\n', i)
+    #pk.printf('%d   %d     %f\n',i,p_mesh_cell[i], p_pos_x[i])
     
     kicker: pk.double = 1e-8
    
@@ -56,9 +57,9 @@ def Advance_cycle(i: int,
 #    to_move[i] += how_much
     
 
-def pk2np(pkarr, nparr):
-    for i in range(int(len(nparr))):
-        nparr[i] = pkarr[i]
+#def pk2np(pkarr, nparr):
+#    for i in range(int(len(nparr))):
+#        nparr[i] = pkarr[i]
 
 
 def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
@@ -71,42 +72,36 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
     #this is only here while devloping eventually all variables will views
     
     #allocate special data
-    p_pos_x_pk: pk.View1D[pk.double] = pk.View([num_part], pk.double)
-    p_pos_y_pk: pk.View1D[pk.double] = pk.View([num_part], pk.double)
-    p_pos_z_pk: pk.View1D[pk.double] = pk.View([num_part], pk.double)
+    p_pos_x_pk = pk.from_numpy(p_pos_x)
+    p_pos_y_pk = pk.from_numpy(p_pos_y)
+    p_pos_z_pk = pk.from_numpy(p_pos_z)
     
-    p_dir_y_pk: pk.View1D[pk.double] = pk.View([num_part], pk.double)
-    p_dir_z_pk: pk.View1D[pk.double] = pk.View([num_part], pk.double)
-    p_dir_x_pk: pk.View1D[pk.double] = pk.View([num_part], pk.double)
+    p_dir_y_pk = pk.from_numpy(p_dir_y)
+    p_dir_z_pk = pk.from_numpy(p_dir_z)
+    p_dir_x_pk = pk.from_numpy(p_dir_x)
     
-    p_mesh_cell_pk: pk.View1D[int] = pk.View([num_part], int)
+    #print(p_mesh_cell.dtype)
+    p_mesh_cell_pk = pk.from_numpy(p_mesh_cell)
     
-    p_speed_pk: pk.View1D[pk.double] = pk.View([num_part], pk.double)
-    p_time_pk: pk.View1D[pk.double] = pk.View([num_part], pk.double)
+    p_speed_pk = pk.from_numpy(p_speed)
+    p_time_pk = pk.from_numpy(p_time)
     
-    mesh_total_xsec_pk: pk.View1D[pk.double] = pk.View([max_mesh_index], pk.double)
+    mesh_total_xsec_pk = pk.from_numpy(mesh_total_xsec)
     
-    for i in range(num_part):
-        p_pos_x_pk[i] = p_pos_x[i]
-        p_pos_y_pk[i] = p_pos_y[i]
-        p_pos_z_pk[i] = p_pos_z[i]
+    #print(p_pos_x_pk.dtype)
+    #print(p_pos_y_pk.dtype)
+    #print(p_pos_z_pk.dtype)
+    #print(p_dir_y_pk.dtype)
+    #print(p_dir_z_pk.dtype)
+    #print(p_dir_x_pk.dtype)
+    #print(p_mesh_cell_pk.dtype)
+    #print(p_speed_pk.dtype)
+    #print(p_time_pk.dtype)
+    #print(mesh_total_xsec_pk.dtype)
     
-        p_mesh_cell_pk[i] = p_mesh_cell[i]
-        
-        p_dir_y_pk[i] = p_dir_y[i]
-        p_dir_z_pk[i] = p_dir_z[i]
-        p_dir_x_pk[i] = p_dir_x[i]
-    
-        p_speed_pk[i] = p_speed[i]
-        p_time_pk[i] = p_time[i]
-    
-    
-    for i in range(max_mesh_index):
-        mesh_total_xsec_pk[i] = mesh_total_xsec[i]
     #print(mesh_total_xsec_pk)
     #print(max_mesh_index)
     
-    rands: pk.View1D[pk.double] = pk.View([num_part], pk.double) #allocation for rands
     p_end_trans: pk.View1D[int] = pk.View([num_part], int) #flag
     p_end_trans.fill(0)
     end_flag = 0
@@ -116,23 +111,26 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
     pre_p_mesh = np.zeros(num_part, dtype=int)
     pre_p_x = np.zeros(num_part)
     post_p_x = np.zeros(num_part)
-    p_dist_travled: pk.View1D[pk.double] = pk.View([num_part], pk.double)
+    p_dist_travled: pk.View1D[pk.float] = pk.View([num_part], pk.double)
     
     while end_flag == 0:
         #allocate randoms
         summer = 0
         rands_np = np.random.random([num_part])
-        for i in range(num_part):
-            rands[i] = rands_np[i]
+        rands = pk.from_numpy(rands_np)
         #vector of indicies for particle transport
         
         p = pk.RangePolicy(pk.get_default_space(), 0, num_part)
-        
-        
         p_dist_travled.fill(0)
         
-        pk2np(p_mesh_cell_pk, pre_p_mesh)
-        pk2np(p_pos_x_pk, pre_p_x)
+        pre_p_mesh = p_mesh_cell_pk
+        pre_p_x = p_pos_x_pk
+        
+        #print(rands.dtype)
+        #print(p_dist_travled.dtype)
+        #print(p_end_trans.dtype)
+        #print(type(L))
+        #print(type(dx))
         
         pk.parallel_for(num_part, Advance_cycle,
                         p_pos_x=p_pos_x_pk, p_pos_y=p_pos_y_pk, p_pos_z=p_pos_z_pk,
@@ -140,8 +138,8 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
                         p_mesh_cell=p_mesh_cell_pk, p_speed=p_speed_pk, p_time=p_time_pk,
                         dx=dx, mesh_total_xsec=mesh_total_xsec_pk, L=L, p_dist_travled=p_dist_travled, 
                         p_end_trans=p_end_trans, rands=rands)#pk for number still in transport
-        
-        pk2np(p_pos_x_pk, post_p_x)
+        #print('through')
+        post_p_x = p_pos_x_pk
         
         #print(pre_p_x == post_p_x)
         #print(pre_p_x)
