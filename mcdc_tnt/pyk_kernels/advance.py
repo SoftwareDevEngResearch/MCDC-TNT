@@ -3,6 +3,9 @@ import numpy as np
 import pykokkos as pk
 
 
+def Randoms(num_parts):
+    return(np.random.random(num_parts))
+
 @pk.workload
 class Advance:
     def __init__(self, p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
@@ -45,18 +48,16 @@ class Advance:
         while end_flag == 0:
             #allocate randoms
             summer = 0
-            rands_np = np.random.random([num_part])
+            rands_np = Randoms(num_part)
             rands = pk.from_numpy(rands_np)
             #vector of indicies for particle transport
             
-            p = pk.RangePolicy(pk.get_default_space(), 0, num_part)
+            #p = pk.RangePolicy(pk.get_default_space(), 0, num_part)
             p_dist_travled.fill(0)
             
             pre_p_mesh = p_mesh_cell_pk
-            pre_p_x = p_pos_x_pk
             
-            
-            pk.parallel_for(self.num_part, self.Advance_cycle)#pk for number still in transport
+            pk.parallel_for(self.num_part, self.Advance_cycle, p_dist_traveled=p_dist_traveled, p_end_trans=p_end_trans, rands=rands)#pk for number still in transport
             post_p_x = p_pos_x_pk
             
             end_flag = 1
@@ -71,23 +72,23 @@ class Advance:
                 summer += p_end_trans[i]
             
             #print(cycle_count)
-            if (cycle_count > int(1e3)):
-                print("************ERROR**********")
-                print(" Max itter hit")
-                print(p_end_trans)
-                print()
-                print()
-                return()
+            #if (cycle_count > int(1e3)):
+            #    print("************ERROR**********")
+            #    print(" Max itter hit")
+            #    print(p_end_trans)
+            #    print()
+            #    print()
+            #    return()
             cycle_count += 1
             
-            print("Advance Complete:......{1}%       ".format(cycle_count, int(100*summer/num_part)), end = "\r")
-        print()
+            #print("Advance Complete:......{1}%       ".format(cycle_count, int(100*summer/num_part)), end = "\r")
+        #print()
         
         
         
     
     @pk.workunit
-    def Advance_cycle(i: int, rands, p_end_trans, p_dist_traveled):
+    def Advance_cycle(i: int, p_dist_travled: pk.View1D[pk.double], p_end_trans: pk.View1D[int], rands: pk.View1D[pk.double]):
         #pk.printf('%d\n', i)
         #pk.printf('%d   %d     %f\n',i,p_mesh_cell[i], p_pos_x[i])
         
@@ -100,7 +101,7 @@ class Advance:
                 p_end_trans[i] = 1
                 
             else:
-                dist: pk.double = -math.log(self.rands[i]) / self.mesh_total_xsec[self.p_mesh_cell[i]]
+                dist: pk.double = -math.log(rands[i]) / self.mesh_total_xsec[self.p_mesh_cell[i]]
                 
                 #pk.printf('%d   %f    %f     %f\n', i, dist, rands[i], mesh_total_xsec[p_mesh_cell[i]])
                 
@@ -111,33 +112,25 @@ class Advance:
                 RB: pk.double = self.LB + self.dx
                 
                 if (x_loc < LB):        #move partilce into cell at left
-                    self.p_dist_travled[i] = (LB - self.p_pos_x[i])/self.p_dir_x[i] + self.kicker
+                    p_dist_travled[i] = (LB - self.p_pos_x[i])/self.p_dir_x[i] + self.kicker
                     self.p_mesh_cell[i] -= 1
                    
                 elif (x_loc > RB):      #move particle into cell at right
-                    self.p_dist_travled[i] = (RB - self.p_pos_x[i])/self.p_dir_x[i] + self.kicker
+                    p_dist_travled[i] = (RB - self.p_pos_x[i])/self.p_dir_x[i] + self.kicker
                     self.p_mesh_cell[i] += 1
                     
                 else:                   #move particle in cell
-                    self.p_dist_travled[i] = dist
-                    self.p_end_trans[i] = 1
+                    p_dist_travled[i] = dist
+                    p_end_trans[i] = 1
                   
                 #pk.printf('%d:  x pos before step     %f\n', i, p_pos_x[i])
                 #p_pos_x[i] = p_dir_x[i]*p_dist_travled[i] + p_pos_x[i]
-                self.p_pos_x[i] = self.p_dir_x[i]*self.p_dist_travled[i] + self.p_pos_x[i]
-                self.p_pos_y[i] = self.p_dir_y[i]*self.p_dist_travled[i] + self.p_pos_y[i]
-                self.p_pos_z[i] = self.p_dir_z[i]*self.p_dist_travled[i] + self.p_pos_z[i]
+                self.p_pos_x[i] = self.p_dir_x[i]*p_dist_travled[i] + self.p_pos_x[i]
+                self.p_pos_y[i] = self.p_dir_y[i]*p_dist_travled[i] + self.p_pos_y[i]
+                self.p_pos_z[i] = self.p_dir_z[i]*p_dist_travled[i] + self.p_pos_z[i]
                 
                 #pk.printf('%d:  x pos after step:     %f       should be: %f\n', i, p_pos_x[i], (temp_x))
                 self.p_time[i]  += dist/self.p_speed[i]
-    
-    
-    #@pk.workunit
-    #def move()
-    
-    
-    #@pk.workunit
-    #def sample()
 
 
 
@@ -188,7 +181,7 @@ def test_Advance():
     mesh_dist_traveled_squared = np.zeros(N_m)
     mesh_dist_traveled = np.zeros(N_m)
     
-    [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared] = Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, L)
+    [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared] = pk.execute(pk.ExecutionSpace.OpenMP, Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, L))
     
     
     assert (np.sum(mesh_dist_traveled) > 0)

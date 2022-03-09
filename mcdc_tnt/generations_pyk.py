@@ -11,7 +11,7 @@ import pyk_kernels as kernels
 
 
 #===============================================================================
-# EVENT 0 : Sample particle sources
+# EVENT 0 : Sample particle source
 #===============================================================================
 
 #@nb.jit(nopython=True)

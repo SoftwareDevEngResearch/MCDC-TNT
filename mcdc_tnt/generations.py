@@ -1,8 +1,9 @@
 import numpy as np
 #import numba as nb
 
-#import numba_kernels.cpu as kernels
-import pyk_kernels as kernels
+#import pp_kernels as kernels
+import numba_kernels.cpu as kernels
+#import pyk_kernels as kernels
 #===============================================================================
 # Simulation Setup
 #===============================================================================
