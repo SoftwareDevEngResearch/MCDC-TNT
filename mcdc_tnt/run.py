@@ -1,6 +1,6 @@
 import generations
 from input_parser import SimulationSetup
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 import sys
 import argparse
@@ -37,11 +37,11 @@ def run():
 
     scalar_flux /= np.max(scalar_flux)
     
-    #plt.figure(1)
-    #plt.plot(x_mesh, scalar_flux, '-b', x_mesh, standard_deviation_flux, '--k')
-    #plt.title("Scalar Flux: ", )
-    #plt.ylabel("$\phi [cm^{-2}s^{-1}]$")
-    #plt.xlabel("x [cm]")
+    plt.figure(1)
+    plt.plot(x_mesh, scalar_flux, '-b', x_mesh, standard_deviation_flux, '--k')
+    plt.title("Scalar Flux: ", )
+    plt.ylabel("$\phi [cm^{-2}s^{-1}]$")
+    plt.xlabel("x [cm]")
     #plt.show()
 
 

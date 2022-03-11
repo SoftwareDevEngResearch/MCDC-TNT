@@ -11,7 +11,7 @@ import pyk_kernels as kernels
 
 
 #===============================================================================
-# EVENT 0 : Sample particle sources
+# EVENT 0 : Sample particle source
 #===============================================================================
 
 #@nb.jit(nopython=True)
@@ -59,8 +59,10 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     # Initialize RNG
     np.random.seed(comp_parms['seed'])
     
+    
     init_particle = num_part
-    meshwise_fission_pdf = np.zeros(N_mesh, dtype=np.float32)
+    meshwise_fission_pdf = np.zeros(N_mesh, dtype=float)
+    meshwise_fission_pdf = pk.from_numpy(meshwise_fission_pdf)
     
     total_mesh_fission_xsec = sum(mesh_fis_xsec)
     for cell in range(N_mesh):
@@ -71,8 +73,14 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         mesh_fis_xsec[cell] = mesh_fis_xsec[cell] / mesh_total_xsec[cell]
         
     meshwise_fission_pdf /= sum(meshwise_fission_pdf)
-    mesh_dist_traveled = np.zeros(N_mesh, dtype=np.float32)
-    mesh_dist_traveled_squared = np.zeros(N_mesh, dtype=np.float32)
+    meshwise_fission_pdf = pk.from_numpy(meshwise_fission_pdf)
+    
+    mesh_dist_traveled = np.zeros(N_mesh, dtype=float)
+    mesh_dist_traveled = pk.from_numpy(mesh_dist_traveled)
+    
+    mesh_dist_traveled_squared = np.zeros(N_mesh, dtype=float)
+    mesh_dist_traveled_squared = pk.from_numpy(mesh_dist_traveled_squared)
+    
     
     
     #===============================================================================
@@ -86,29 +94,44 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     p_pos_y = np.zeros(phase_parts, dtype=float)
     p_pos_z = np.zeros(phase_parts, dtype=float)
     
+    p_pos_x = pk.from_numpy(p_pos_x)
+    p_pos_y = pk.from_numpy(p_pos_y)
+    p_pos_z = pk.from_numpy(p_pos_z)
+    
     # Direction
     p_dir_x = np.zeros(phase_parts, dtype=float)
     p_dir_y = np.zeros(phase_parts, dtype=float)
     p_dir_z = np.zeros(phase_parts, dtype=float)
     
+    p_dir_x = pk.from_numpy(p_dir_x)
+    p_dir_y = pk.from_numpy(p_dir_y)
+    p_dir_z = pk.from_numpy(p_dir_z)
+    
     # Speed
     p_speed = np.zeros(phase_parts, dtype=float)
+    p_speed = pk.from_numpy(p_speed)
     
     # Time
     p_time = np.zeros(phase_parts, dtype=float)
+    p_time = pk.from_numpy(p_time)
     
     # Region
     p_mesh_cell = np.zeros(phase_parts, dtype=int)
+    p_mesh_cell = pk.from_numpy(p_mesh_cell)
     
     # Flags
     p_alive = np.full(phase_parts, False, dtype=bool)
+    p_alive = pk.from_numpy(p_alive)
     
     #mesh_particle_index = np.zeros([N_mesh, phase_parts], dtype=np.uint8)
-    
     
     scatter_event_index = np.zeros(phase_parts, dtype=int)
     capture_event_index = np.zeros(phase_parts, dtype=int)
     fission_event_index = np.zeros(phase_parts, dtype=int)
+    
+    scatter_event_index = pk.from_numpy(scatter_event_index)
+    capture_event_index = pk.from_numpy(capture_event_index)
+    fission_event_index = pk.from_numpy(fission_event_index)
     
     
     [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, 
