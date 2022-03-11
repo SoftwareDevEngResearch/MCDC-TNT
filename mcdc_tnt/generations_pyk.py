@@ -44,6 +44,12 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     """
     #import_case(comp_parms['hard_targ'])
     
+    #===============================================================================
+    # Pykokkos Setup
+    #===============================================================================
+    pk.set_default_space(pk.ExecutionSpace.OpeMP)
+    
+    
     
     N_mesh = sim_perams['N_mesh']
     nu_new_neutrons = sim_perams['nu']
@@ -90,57 +96,51 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     phase_parts = 5*num_part #see note about data storage
     
     # Position
-    p_pos_x = np.zeros(phase_parts, dtype=float)
-    p_pos_y = np.zeros(phase_parts, dtype=float)
-    p_pos_z = np.zeros(phase_parts, dtype=float)
+    p_pos_x_np = np.zeros(phase_parts, dtype=float)
+    p_pos_y_np = np.zeros(phase_parts, dtype=float)
+    p_pos_z_np = np.zeros(phase_parts, dtype=float)
     
-    p_pos_x = pk.from_numpy(p_pos_x)
-    p_pos_y = pk.from_numpy(p_pos_y)
-    p_pos_z = pk.from_numpy(p_pos_z)
+    p_pos_x = pk.from_numpy(p_pos_x_np)
+    p_pos_y = pk.from_numpy(p_pos_y_np)
+    p_pos_z = pk.from_numpy(p_pos_z_np)
     
     # Direction
-    p_dir_x = np.zeros(phase_parts, dtype=float)
-    p_dir_y = np.zeros(phase_parts, dtype=float)
-    p_dir_z = np.zeros(phase_parts, dtype=float)
+    p_dir_x_np = np.zeros(phase_parts, dtype=float)
+    p_dir_y_np = np.zeros(phase_parts, dtype=float)
+    p_dir_z_np = np.zeros(phase_parts, dtype=float)
     
-    p_dir_x = pk.from_numpy(p_dir_x)
-    p_dir_y = pk.from_numpy(p_dir_y)
-    p_dir_z = pk.from_numpy(p_dir_z)
+    p_dir_x = pk.from_numpy(p_dir_x_np)
+    p_dir_y = pk.from_numpy(p_dir_y_np)
+    p_dir_z = pk.from_numpy(p_dir_z_np)
     
     # Speed
-    p_speed = np.zeros(phase_parts, dtype=float)
-    p_speed = pk.from_numpy(p_speed)
+    p_speed_np = np.zeros(phase_parts, dtype=float)
+    p_speed = pk.from_numpy(p_speed_np)
     
     # Time
-    p_time = np.zeros(phase_parts, dtype=float)
-    p_time = pk.from_numpy(p_time)
+    p_time_np = np.zeros(phase_parts, dtype=float)
+    p_time = pk.from_numpy(p_time_np)
     
     # Region
-    p_mesh_cell = np.zeros(phase_parts, dtype=int)
-    p_mesh_cell = pk.from_numpy(p_mesh_cell)
+    p_mesh_cell_np = np.zeros(phase_parts, dtype=np.int32)
+    p_mesh_cell = pk.from_numpy(p_mesh_cell_np)
     
     # Flags
-    p_alive = np.full(phase_parts, False, dtype=bool)
-    p_alive = pk.from_numpy(p_alive)
+    p_alive_np = np.full(phase_parts, False, dtype=np.int32)
+    p_alive = pk.from_numpy(p_alive_np)
     
     #mesh_particle_index = np.zeros([N_mesh, phase_parts], dtype=np.uint8)
     
-    scatter_event_index = np.zeros(phase_parts, dtype=int)
-    capture_event_index = np.zeros(phase_parts, dtype=int)
-    fission_event_index = np.zeros(phase_parts, dtype=int)
+    scatter_event_index_np = np.zeros(phase_parts, dtype=int)
+    capture_event_index_np = np.zeros(phase_parts, dtype=int)
+    fission_event_index_np = np.zeros(phase_parts, dtype=int)
     
-    scatter_event_index = pk.from_numpy(scatter_event_index)
-    capture_event_index = pk.from_numpy(capture_event_index)
-    fission_event_index = pk.from_numpy(fission_event_index)
+    scatter_event_index = pk.from_numpy(scatter_event_index_np)
+    capture_event_index = pk.from_numpy(capture_event_index_np)
+    fission_event_index = pk.from_numpy(fission_event_index_np)
     
     
-    [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, 
-    p_alive] = kernels.SourceParticles(p_pos_x, p_pos_y,
-                                                      p_pos_z, p_mesh_cell, dx,
-                                                      p_dir_y, p_dir_z, p_dir_x,
-                                                      p_speed, p_time, p_alive,
-                                                      num_part, meshwise_fission_pdf,
-                                                      particle_speed, sim_perams['iso'])
+    kernels.SourceParticles(p_pos_x, p_pos_y,p_pos_z, p_mesh_cell, dx,p_dir_y, p_dir_z, p_dir_x,p_speed, p_time, p_alive,num_part, meshwise_fission_pdf,particle_speed)
     
     
     #===============================================================================
@@ -165,9 +165,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         killed = 0
         alive_cycle_start = num_part
         
-        [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared] = kernels.Advance(
-                p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
-                num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, surface_distances[len(surface_distances)-1])
+        kernels.Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, surface_distances[len(surface_distances)-1])
         
         #===============================================================================
         # EVENT 2 : Still in problem
