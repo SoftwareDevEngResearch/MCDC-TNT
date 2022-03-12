@@ -35,7 +35,7 @@ def SimulationSetup(input_file):
     #===============================================================================
     
     Length_slab = np.float(inputs['length of slab'])
-    surface_distances = np.array(inputs['surface locations'])
+    surface_distances = np.array(inputs['surface locations'], dtype=float)
     
     mesh_cell_length = np.float(inputs['dx']) #dx
     N_mesh = int(Length_slab/mesh_cell_length)

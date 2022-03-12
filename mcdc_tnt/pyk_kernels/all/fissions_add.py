@@ -73,9 +73,6 @@ class FissionsAdd:
                 
                 k+=1
             
-    
-    
-    
 
 def test_FissionsAdd():
     

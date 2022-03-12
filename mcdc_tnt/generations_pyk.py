@@ -1,8 +1,8 @@
 import numpy as np
-import numba as nb
+#import numba as nb
 import pykokkos as pk
 
-import pyk_kernels as kernels
+import pyk_kernels.all as kernels
 
 #===============================================================================
 # Simulation Setup
@@ -15,7 +15,7 @@ import pyk_kernels as kernels
 #===============================================================================
 
 #@nb.jit(nopython=True)
-def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, mesh_total_xsec, surface_distances):
+def Generations(comp_parms, sim_perams, mesh_cap_xsec_np, mesh_scat_xsec_np, mesh_fis_xsec_np, mesh_total_xsec_np, surface_distances_np):
     """
     Runs a generation of transport. Eachone is launched in complete isolation of
     another
@@ -47,9 +47,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     #===============================================================================
     # Pykokkos Setup
     #===============================================================================
-    pk.set_default_space(pk.ExecutionSpace.OpeMP)
-    
-    
+    pk.set_default_space(pk.ExecutionSpace.OpenMP)
     
     N_mesh = sim_perams['N_mesh']
     nu_new_neutrons = sim_perams['nu']
@@ -67,25 +65,27 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     
     
     init_particle = num_part
-    meshwise_fission_pdf = np.zeros(N_mesh, dtype=float)
-    meshwise_fission_pdf = pk.from_numpy(meshwise_fission_pdf)
     
-    total_mesh_fission_xsec = sum(mesh_fis_xsec)
-    for cell in range(N_mesh):
-        meshwise_fission_pdf[cell] = mesh_fis_xsec[cell]/total_mesh_fission_xsec
-        
-        mesh_cap_xsec[cell] = mesh_cap_xsec[cell] / mesh_total_xsec[cell]
-        mesh_scat_xsec[cell] = mesh_scat_xsec[cell] / mesh_total_xsec[cell]
-        mesh_fis_xsec[cell] = mesh_fis_xsec[cell] / mesh_total_xsec[cell]
-        
-    meshwise_fission_pdf /= sum(meshwise_fission_pdf)
-    meshwise_fission_pdf = pk.from_numpy(meshwise_fission_pdf)
     
-    mesh_dist_traveled = np.zeros(N_mesh, dtype=float)
-    mesh_dist_traveled = pk.from_numpy(mesh_dist_traveled)
+    total_mesh_fission_xsec = sum(mesh_fis_xsec_np)
     
-    mesh_dist_traveled_squared = np.zeros(N_mesh, dtype=float)
-    mesh_dist_traveled_squared = pk.from_numpy(mesh_dist_traveled_squared)
+    meshwise_fission_pdf_np = mesh_fis_xsec_np/total_mesh_fission_xsec
+    meshwise_fission_pdf = pk.from_numpy(meshwise_fission_pdf_np)
+    
+    
+    mesh_cap_xsec = pk.from_numpy(mesh_cap_xsec_np)
+    mesh_scat_xsec = pk.from_numpy(mesh_scat_xsec_np)
+    mesh_fis_xsec = pk.from_numpy(mesh_fis_xsec_np)
+    mesh_total_xsec = pk.from_numpy(mesh_total_xsec_np)
+    
+    meshwise_fission_pdf_np /= sum(meshwise_fission_pdf_np)
+    meshwise_fission_pdf = pk.from_numpy(meshwise_fission_pdf_np)
+    
+    mesh_dist_traveled_np = np.zeros(N_mesh, dtype=float)
+    mesh_dist_traveled = pk.from_numpy(mesh_dist_traveled_np)
+    
+    mesh_dist_traveled_squared_np = np.zeros(N_mesh, dtype=float)
+    mesh_dist_traveled_squared = pk.from_numpy(mesh_dist_traveled_squared_np)
     
     
     
@@ -139,9 +139,30 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     capture_event_index = pk.from_numpy(capture_event_index_np)
     fission_event_index = pk.from_numpy(fission_event_index_np)
     
+    surface_distances = pk.from_numpy(surface_distances_np)
+    print(surface_distances.dtype)
     
-    kernels.SourceParticles(p_pos_x, p_pos_y,p_pos_z, p_mesh_cell, dx,p_dir_y, p_dir_z, p_dir_x,p_speed, p_time, p_alive,num_part, meshwise_fission_pdf,particle_speed)
+    rands_np = np.random.random([num_part*4])
+    rands = pk.from_numpy(rands_np)
     
+    #print(p_pos_x.dtype)
+    #print(p_pos_y.dtype)
+    #print(p_pos_z.dtype)
+    #print(p_mesh_cell.dtype)
+    #print(p_dir_y.dtype)
+    #print(p_dir_z.dtype)
+    #print(p_dir_x.dtype)
+    #print(p_speed.dtype)
+    #print(p_time.dtype)
+    #print(p_alive.dtype)
+    #print(meshwise_fission_pdf.dtype)
+    #print(rands.dtype)
+    
+    
+    
+    pk.execute(pk.ExecutionSpace.Default, 
+        kernels.SourceParticles(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive, num_part, particle_speed, meshwise_fission_pdf, rands))
+          #                      p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive, num_parts, particle_speed, meshwise_fission_pdf, rands
     
     #===============================================================================
     # Generation Loop
@@ -151,6 +172,10 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     alive = num_part
     trans_lhs = 0
     trans_rhs = 0
+    
+    #pk view to export needed integer values form a function
+    clever_out: pk.View1D[int] = pk.View([10], pk.int32)
+    
     while alive > 0:
         print("")
         print("===============================================================================")
@@ -165,25 +190,32 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         killed = 0
         alive_cycle_start = num_part
         
+        print('Entering Advance!')
         kernels.Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, surface_distances[len(surface_distances)-1])
         
         #===============================================================================
         # EVENT 2 : Still in problem
         #===============================================================================
-        [p_alive, tally_left_t, tally_right_t] = kernels.StillIn(p_pos_x, surface_distances, p_alive, num_part)
+        print('Entering StillIn!')
+        pk.execute(pk.ExecutionSpace.Default, kernels.StillIn(p_pos_x, surface_distances, p_alive, num_part, clever_out))
         
-        trans_lhs += tally_left_t
-        trans_rhs += tally_right_t
+        trans_lhs += clever_out[0]
+        trans_rhs += clever_out[1]
         
         #===============================================================================
         # EVENT 3 : Sample event
         #===============================================================================
         
-        rands = np.random.random(num_part)
+        rands_np = np.random.random(num_part)
+        rands = pk.from_numpy(rands_np)
         
-        [scatter_event_index, scat_count, capture_event_index, cap_count, fission_event_index, fis_count] = kernels.SampleEvent(
-                p_mesh_cell, p_alive, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, scatter_event_index,
-                capture_event_index, fission_event_index, num_part, nu_new_neutrons, rands)
+        print('Entering Sample!')
+        pk.execute(pk.ExecutionSpace.Default, kernels.SampleEvent(p_mesh_cell, p_alive, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, scatter_event_index,
+                                capture_event_index, fission_event_index, num_part, nu_new_neutrons, rands, clever_out))
+       
+        scat_count = clever_out[0]
+        cap_count = clever_out[1]
+        fis_count = clever_out[2] 
        
         
         fissions_to_add = (fis_count)*nu_new_neutrons
@@ -195,9 +227,11 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         # EVENT 3 : Scatter
         #===============================================================================
         
-        rands = np.random.random(scat_count * 2) #exact number of rands known
+        rands_np = np.random.random(scat_count * 2) #exact number of rands known
+        rands = pk.from_numpy(rands_np)
         
-        [p_dir_x, p_dir_y, p_dir_z] = kernels.Scatter(scatter_event_index, scat_count, p_dir_x, p_dir_y, p_dir_z, rands)
+        print('Entering Scatter!')
+        pk.execute(pk.ExecutionSpace.Default, kernels.Scatter(scatter_event_index, scat_count, p_dir_x, p_dir_y, p_dir_z, rands))
         
         
         #===============================================================================
@@ -207,14 +241,15 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         # print("max index {0}".format(num_part))
         # print("")
         
-        rands = np.random.random(fis_count * nu_new_neutrons * 2) #exact number of rands known
+        rands_np = np.random.random(fis_count * nu_new_neutrons * 2) #exact number of rands known
+        rands = pk.from_numpy(rands_np)
         #2 is for number reqired per new neutron
         
-        [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, 
-         p_time, p_alive, particles_added_fission] = kernels.FissionsAdd(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, 
+        print('Entering Fissions!')
+        pk.execute(pk.ExecutionSpace.Default, kernels.FissionsAdd(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, 
                                                   p_dir_y, p_dir_z, p_dir_x, p_speed, 
                                                   p_time, p_alive, fis_count, nu_new_neutrons, 
-                                                  fission_event_index, num_part, particle_speed, rands)
+                                                  fission_event_index, num_part, particle_speed, rands))
     
         num_part += particles_added_fission
         # print("")
@@ -237,16 +272,15 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         #===============================================================================
         # Event 5: Purge the dead
         #===============================================================================
-        
-        [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, 
-         p_time, p_alive, kept] = kernels.BringOutYourDead(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, 
+        print('Entering PURGE!')
+        pk.execute(pk.ExecutionSpace.Default, kernels.BringOutYourDead(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, 
                                                    p_dir_y, p_dir_z, p_dir_x, p_speed, 
-                                                   p_time, p_alive, num_part)
+                                                   p_time, p_alive, num_part, clever_out))
                                                    
-        num_part = kept
+        num_part = clever_out[0]
         alive = num_part
                           
-        # print("max index {0}".format(num_part))
+        # print("max index {0}".format(num_part))mesh_fis_xsec
         # print("")
         
         # print(max(p_mesh_cell[0:num_part]))
@@ -255,14 +289,19 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     # Step Output
     #===============================================================================
     
+    #get back from pyk views
+    for i in range(N_mesh):
+        mesh_dist_traveled_np[i] = mesh_dist_traveled[i]
+        mesh_dist_traveled_squared_np[i] = mesh_dist_traveled_squared[i]
     
-    mesh_dist_traveled /= init_particle
-    mesh_dist_traveled_squared /= init_particle
-    standard_deviation_flux = ((mesh_dist_traveled_squared - mesh_dist_traveled**2)/(init_particle-1))
+    
+    mesh_dist_traveled_np /= init_particle
+    mesh_dist_traveled_squared_np /= init_particle
+    standard_deviation_flux = ((mesh_dist_traveled_squared_np - mesh_dist_traveled_np**2)/(init_particle-1))
     standard_deviation_flux = np.sqrt(standard_deviation_flux/(init_particle))
     
     x_mesh = np.linspace(0,surface_distances[len(surface_distances)-1], N_mesh)
-    scalar_flux = mesh_dist_traveled/dx
+    scalar_flux = mesh_dist_traveled_np/dx
     scalar_flux/=max(scalar_flux)
     
     return(scalar_flux, standard_deviation_flux)

@@ -4,53 +4,78 @@ import pykokkos as pk
 
 
 
-@pk.workunit
-def Advance_cycle(i: int,
-            p_pos_x: pk.View1D[pk.double], p_pos_y: pk.View1D[pk.double], p_pos_z: pk.View1D[pk.double],
-            p_dir_y: pk.View1D[pk.double], p_dir_z: pk.View1D[pk.double], p_dir_x: pk.View1D[pk.double], 
-            p_mesh_cell: pk.View1D[int], p_speed: pk.View1D[pk.double], p_time: pk.View1D[pk.double],  
-            dx: pk.double, mesh_total_xsec: pk.View1D[pk.double], L: pk.double,
-            p_dist_travled: pk.View1D[pk.double], p_end_trans: pk.View1D[int], rands: pk.View1D[pk.double]):
-    #pk.printf('%d   %f\n',i, p_pos_x[i])
+@pk.workload
+class Advance_cycle:
+    def __init__(self, num_part, p_pos_x, p_pos_y, p_pos_z, p_dir_y, p_dir_z, p_dir_x,  p_mesh_cell, p_speed, p_time, dx, mesh_total_xsec, L, p_dist_travled, p_end_trans, rands):
     
-    kicker: pk.double = 1e-8
-   
-    if (p_end_trans[i] == 0):
-        if (p_pos_x[i] < 0): #exited rhs
-            p_end_trans[i] = 1
-        elif (p_pos_x[i] >= L): #exited lhs
-            p_end_trans[i] = 1
-            
-        else:
-            dist: pk.double = -math.log(rands[i]) / mesh_total_xsec[p_mesh_cell[i]]
-            
-            #pk.printf('%d   %f    %f     %f\n', i, dist, rands[i], mesh_total_xsec[p_mesh_cell[i]])
-            
-            #p_dist_travled[i] = dist
-            
-            x_loc: pk.double = (p_dir_x[i] * dist) + p_pos_x[i]
-            LB: pk.double = p_mesh_cell[i] * dx
-            RB: pk.double = LB + dx
-            
-            if (x_loc < LB):        #move partilce into cell at left
-                p_dist_travled[i] = (LB - p_pos_x[i])/p_dir_x[i] + kicker
-                p_mesh_cell[i] -= 1
-               
-            elif (x_loc > RB):      #move particle into cell at right
-                p_dist_travled[i] = (RB - p_pos_x[i])/p_dir_x[i] + kicker
-                p_mesh_cell[i] += 1
+        self.p_pos_x: pk.View1D[pk.double] = p_pos_x
+        self.p_pos_y: pk.View1D[pk.double] = p_pos_y
+        self.p_pos_z: pk.View1D[pk.double] = p_pos_z
+        
+        self.p_dir_y: pk.View1D[pk.double] = p_dir_y
+        self.p_dir_z: pk.View1D[pk.double] = p_dir_z
+        self.p_dir_x: pk.View1D[pk.double] = p_dir_x
+        
+        self.p_mesh_cell: pk.View1D[int] = p_mesh_cell
+        self.p_speed: pk.View1D[pk.double] = p_speed
+        self.p_time: pk.View1D[pk.double] = p_time
+        
+        self.dx: pk.double = dx
+        self.L: pk.double = L
+        #print(dx)
+        #print(L)
+        self.num_part: int = num_part
+        
+        self.mesh_total_xsec: pk.View1D[pk.double] = mesh_total_xsec
+        
+        self.p_dist_travled: pk.View1D[pk.double] = p_dist_travled
+        self.p_end_trans: pk.View1D[int] = p_end_trans
+        self.rands: pk.View1D[pk.double] = rands
+        
+    @pk.main
+    def run(self):
+        pk.parallel_for(self.num_part, self.advanceCycle_wu)
+    
+    @pk.workunit
+    def advanceCycle_wu(self, i: int):
+        kicker: pk.double = 1e-8
+       
+        if (self.p_end_trans[i] == 0):
+            if (self.p_pos_x[i] < 0): #exited rhs
+                self.p_end_trans[i] = 1
+            elif (self.p_pos_x[i] >= self.L): #exited lhs
+                self.p_end_trans[i] = 1
                 
-            else:                   #move particle in cell
-                p_dist_travled[i] = dist
-                p_end_trans[i] = 1
-              
-            #pk.printf('%d:  x pos before step     %f\n', i, p_pos_x[i])
-            p_pos_x[i] = p_dir_x[i]*p_dist_travled[i] + p_pos_x[i]
-            p_pos_y[i] = p_dir_y[i]*p_dist_travled[i] + p_pos_y[i]
-            p_pos_z[i] = p_dir_z[i]*p_dist_travled[i] + p_pos_z[i]
-            
-            #pk.printf('%d:  x pos after step:     %f       should be: %f\n', i, p_pos_x[i], (temp_x))
-            p_time[i]  += dist/p_speed[i]
+            else:
+                dist: pk.double = -math.log(self.rands[i]) / self.mesh_total_xsec[self.p_mesh_cell[i]]
+                
+                #pk.printf('%d   %f    %f     %f\n', i, dist, rands[i], mesh_total_xsec[p_mesh_cell[i]])
+                
+                #p_dist_travled[i] = dist
+                
+                x_loc: pk.double = (self.p_dir_x[i] * dist) + self.p_pos_x[i]
+                LB: pk.double = self.p_mesh_cell[i] * self.dx
+                RB: pk.double = LB + self.dx
+                
+                if (x_loc < LB):        #move partilce into cell at left
+                    self.p_dist_travled[i] = (LB - self.p_pos_x[i])/self.p_dir_x[i] + kicker
+                    self.p_mesh_cell[i] -= 1
+                   
+                elif (x_loc > RB):      #move particle into cell at right
+                    self.p_dist_travled[i] = (RB - self.p_pos_x[i])/self.p_dir_x[i] + kicker
+                    self.p_mesh_cell[i] += 1
+                    
+                else:                   #move particle in cell
+                    self.p_dist_travled[i] = dist
+                    self.p_end_trans[i] = 1
+                  
+                #pk.printf('%d:  x pos before step     %f\n', i, p_pos_x[i])
+                self.p_pos_x[i] = self.p_dir_x[i]*self.p_dist_travled[i] + self.p_pos_x[i]
+                self.p_pos_y[i] = self.p_dir_y[i]*self.p_dist_travled[i] + self.p_pos_y[i]
+                self.p_pos_z[i] = self.p_dir_z[i]*self.p_dist_travled[i] + self.p_pos_z[i]
+                
+                #pk.printf('%d:  x pos after step:     %f       should be: %f\n', i, p_pos_x[i], (temp_x))
+                self.p_time[i]  += dist/self.p_speed[i]
 
 
 @pk.workload
@@ -96,59 +121,17 @@ class DistTraveled:
 def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
             num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, L):
             
-    space = pk.ExecutionSpace.OpenMP
-    pk.set_default_space(space)
     
     max_mesh_index = int(len(mesh_total_xsec)-1)
-    #this is only here while devloping eventually all variables will views
     
-    #allocate special data
-    p_pos_x_pk = pk.from_numpy(p_pos_x)
-    p_pos_y_pk = pk.from_numpy(p_pos_y)
-    p_pos_z_pk = pk.from_numpy(p_pos_z)
-    
-    p_dir_y_pk = pk.from_numpy(p_dir_y)
-    p_dir_z_pk = pk.from_numpy(p_dir_z)
-    p_dir_x_pk = pk.from_numpy(p_dir_x)
-    
-    p_mesh_cell_pk = pk.from_numpy(p_mesh_cell)
-    
-    p_speed_pk = pk.from_numpy(p_speed)
-    p_time_pk = pk.from_numpy(p_time)
-    
-    mesh_total_xsec_pk = pk.from_numpy(mesh_total_xsec)
-    
-    mesh_dist_traveled_pk = pk.from_numpy(mesh_dist_traveled)
-    mesh_dist_traveled_squared_pk = pk.from_numpy(mesh_dist_traveled_squared)
-    
-    
-    #print(p_pos_x_pk.dtype)
-    #print(p_pos_y_pk.dtype)
-    #print(p_pos_z_pk.dtype)
-    #print(p_dir_y_pk.dtype)
-    #print(p_dir_z_pk.dtype)
-    #print(p_mesh_cell_pk.dtype)
-    #print(p_speed_pk.dtype)
-    #print(p_time_pk.dtype)
-    #print(mesh_total_xsec_pk.dtype)
-    #print(mesh_dist_traveled_pk.dtype)
-    #print(mesh_dist_traveled_squared_pk.dtype)
-    
-    #print(mesh_total_xsec_pk)
-    #print(max_mesh_index)
-    
-    #rands: pk.View1D[pk.double] = pk.View([num_part], pk.double) #allocation for rands
     p_end_trans: pk.View1D[int] = pk.View([num_part], int) #flag
     p_end_trans.fill(0)
+    p_dist_travled: pk.View1D[pk.double] = pk.View([num_part], pk.double)
+    
     clever_out: pk.View1D[int] = pk.View([4], int)
     
     end_flag = 0
-    
     cycle_count = 0
-    
-    pre_p_x = np.zeros(num_part)
-    post_p_x = np.zeros(num_part)
-    p_dist_travled: pk.View1D[pk.double] = pk.View([num_part], pk.double)
     
     while end_flag == 0:
         #allocate randoms
@@ -160,17 +143,14 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
         p = pk.RangePolicy(pk.get_default_space(), 0, num_part)
         p_dist_travled.fill(0)
         
-        pre_p_mesh = p_mesh_cell_pk
+        pre_p_mesh = p_mesh_cell
+        L = float(L)
         
-        pk.parallel_for(num_part, Advance_cycle,
-                        p_pos_x=p_pos_x_pk, p_pos_y=p_pos_y_pk, p_pos_z=p_pos_z_pk,
-                        p_dir_y=p_dir_y_pk, p_dir_z=p_dir_z_pk, p_dir_x=p_dir_x_pk,
-                        p_mesh_cell=p_mesh_cell_pk, p_speed=p_speed_pk, p_time=p_time_pk,
-                        dx=dx, mesh_total_xsec=mesh_total_xsec_pk, L=L, p_dist_travled=p_dist_travled, 
-                        p_end_trans=p_end_trans, rands=rands)#pk for number still in transport
+        #space = pk.ExecutionSpace.OpenMP
+        pk.execute(pk.ExecutionSpace.OpenMP, Advance_cycle(num_part, p_pos_x, p_pos_y, p_pos_z, p_dir_y, p_dir_z, p_dir_x, p_mesh_cell, p_speed, p_time, dx, mesh_total_xsec, L, p_dist_travled, p_end_trans, rands))#pk for number still in transport
         
         pk.execute(pk.ExecutionSpace.OpenMP,
-            DistTraveled(num_part, max_mesh_index, mesh_dist_traveled_pk, mesh_dist_traveled_squared_pk, p_dist_travled, pre_p_mesh, p_end_trans, clever_out))
+            DistTraveled(num_part, max_mesh_index, mesh_dist_traveled, mesh_dist_traveled_squared, p_dist_travled, pre_p_mesh, p_end_trans, clever_out))
         
         end_flag = clever_out[0]
         summer = clever_out[1]
@@ -188,43 +168,35 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
         print("Advance Complete:......{1}%       ".format(cycle_count, int(100*summer/num_part)), end = "\r")
     print()
     
-    for i in range(num_part):
-        p_pos_x[i] = p_pos_x_pk[i]
-        p_pos_y[i] = p_pos_y_pk[i]
-        p_pos_z[i] = p_pos_z_pk[i]
+
+
+
+@pk.workload
+class StillIn:
+    def __init__(self, p_pos_x, surface_distances, p_alive, num_part, clever_out):
     
-        p_mesh_cell[i] = p_mesh_cell_pk[i]
-        p_speed[i] = p_speed_pk[i] 
-        p_time[i] = p_time_pk[i]
+        self.p_pos_x: pk.View1D[pk.double] = p_pos_x
+        self.clever_out: pk.View1D[int] = clever_out
+        self.surface_distances: pk.View1D[pk.double] = surface_distances
+        self.p_alive: pk.View1D[int] = p_alive
+        self.num_part: int = num_part
         
-    for i in range(max_mesh_index+1):
-        mesh_dist_traveled[i] = mesh_dist_traveled_pk[i]
-        mesh_dist_traveled_squared[i] = mesh_dist_traveled_squared_pk[i]
+    @pk.main
+    def run(self):
+        tally_left: int = 0
+        tally_right: int = 0
+        for i in range(self.num_part):
+            #exit at left
+            if self.p_pos_x[i] <= self.surface_distances[0]:
+                tally_left += 1
+                self.p_alive[i] = 0
+                
+            elif self.p_pos_x[i] >= self.surface_distances[-1]:
+                tally_right += 1
+                self.p_alive[i] = 0
         
-        
-    
-    
-    return(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared)
-
-
-
-
-
-def StillIn(p_pos_x, surface_distances, p_alive, num_part):
-    tally_left = 0
-    tally_right = 0
-    for i in range(num_part):
-        #exit at left
-        if p_pos_x[i] <= surface_distances[0]:
-            tally_left += 1
-            p_alive[i] = False
-            
-        elif p_pos_x[i] >= surface_distances[len(surface_distances)-1]:
-            tally_right += 1
-            p_alive[i] = False
-            
-    return(p_alive, tally_left, tally_right)
-    
+        self.clever_out[0] = tally_left
+        self.clever_out[1] = tally_right
     
     
     
