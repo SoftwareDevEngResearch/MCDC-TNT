@@ -13,6 +13,7 @@ def Advance_cycle(i: int,
             p_dist_travled: pk.View1D[pk.double], p_end_trans: pk.View1D[int], rands: pk.View1D[pk.double]):
     #pk.printf('%d   %f\n',i, p_pos_x[i])
     
+    
     kicker: pk.double = 1e-8
    
     if (p_end_trans[i] == 0):
@@ -98,6 +99,8 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
             
     space = pk.ExecutionSpace.OpenMP
     pk.set_default_space(space)
+    
+    print(L.dtype)
     
     max_mesh_index = int(len(mesh_total_xsec)-1)
     #this is only here while devloping eventually all variables will views

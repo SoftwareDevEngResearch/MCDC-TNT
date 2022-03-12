@@ -3,7 +3,7 @@ import numpy as np
 
 #import pp_kernels as kernels
 #import numba_kernels.cpu as kernels
-import pyk_kernels as kernels
+import pyk_kernels.ad_o as kernels
 #===============================================================================
 # Simulation Setup
 #===============================================================================

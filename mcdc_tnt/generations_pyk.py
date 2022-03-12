@@ -131,9 +131,9 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec_np, mesh_scat_xsec_np, mes
     
     #mesh_particle_index = np.zeros([N_mesh, phase_parts], dtype=np.uint8)
     
-    scatter_event_index_np = np.zeros(phase_parts, dtype=int)
-    capture_event_index_np = np.zeros(phase_parts, dtype=int)
-    fission_event_index_np = np.zeros(phase_parts, dtype=int)
+    scatter_event_index_np = np.zeros(phase_parts, dtype=np.int32)
+    capture_event_index_np = np.zeros(phase_parts, dtype=np.int32)
+    fission_event_index_np = np.zeros(phase_parts, dtype=np.int32)
     
     scatter_event_index = pk.from_numpy(scatter_event_index_np)
     capture_event_index = pk.from_numpy(capture_event_index_np)
@@ -210,6 +210,19 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec_np, mesh_scat_xsec_np, mes
         rands = pk.from_numpy(rands_np)
         
         print('Entering Sample!')
+        #print(p_mesh_cell.dtype)
+        #print(p_alive.dtype)
+        #print(mesh_cap_xsec.dtype)
+        #print(p_mesh_cell.dtype)
+        #print(mesh_scat_xsec.dtype)
+        #print(mesh_fis_xsec.dtype)
+        #print(scatter_event_index.dtype)
+        #print(capture_event_index.dtype)
+        #print(clever_out.dtype)
+        #print(p_alive.dtype)
+        #print(meshwise_fission_pdf.dtype)
+        #print(rands.dtype)
+        
         pk.execute(pk.ExecutionSpace.Default, kernels.SampleEvent(p_mesh_cell, p_alive, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, scatter_event_index,
                                 capture_event_index, fission_event_index, num_part, nu_new_neutrons, rands, clever_out))
        
@@ -247,11 +260,10 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec_np, mesh_scat_xsec_np, mes
         
         print('Entering Fissions!')
         pk.execute(pk.ExecutionSpace.Default, kernels.FissionsAdd(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, 
-                                                  p_dir_y, p_dir_z, p_dir_x, p_speed, 
-                                                  p_time, p_alive, fis_count, nu_new_neutrons, 
-                                                  fission_event_index, num_part, particle_speed, rands))
-    
-        num_part += particles_added_fission
+                                                  p_dir_y, p_dir_z, p_dir_x, 
+                                                  p_time, p_alive, p_speed, fis_count, nu_new_neutrons, 
+                                                  fission_event_index, num_part, particle_speed, rands, clever_out))
+        num_part += clever_out[0]
         # print("")
         # print("max index {0}".format(num_part))
                                                   
