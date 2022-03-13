@@ -163,7 +163,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec_np, mesh_scat_xsec_np, mes
     pk.execute(pk.ExecutionSpace.Default, 
         kernels.SourceParticles(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive, num_part, particle_speed, meshwise_fission_pdf, rands))
           #                      p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, p_alive, num_parts, particle_speed, meshwise_fission_pdf, rands
-    
+    print(sum(p_alive))  
     #===============================================================================
     # Generation Loop
     #===============================================================================
@@ -193,6 +193,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec_np, mesh_scat_xsec_np, mes
         print('Entering Advance!')
         kernels.Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, surface_distances[len(surface_distances)-1])
         
+        print(sum(p_alive[0:num_part]))  
         #===============================================================================
         # EVENT 2 : Still in problem
         #===============================================================================
@@ -202,6 +203,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec_np, mesh_scat_xsec_np, mes
         trans_lhs += clever_out[0]
         trans_rhs += clever_out[1]
         
+        print(sum(p_alive[0:num_part]))  
         #===============================================================================
         # EVENT 3 : Sample event
         #===============================================================================
@@ -225,7 +227,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec_np, mesh_scat_xsec_np, mes
         
         pk.execute(pk.ExecutionSpace.Default, kernels.SampleEvent(p_mesh_cell, p_alive, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, scatter_event_index,
                                 capture_event_index, fission_event_index, num_part, nu_new_neutrons, rands, clever_out))
-       
+        print(sum(p_alive[0:num_part]))
         scat_count = clever_out[0]
         cap_count = clever_out[1]
         fis_count = clever_out[2] 
@@ -263,6 +265,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec_np, mesh_scat_xsec_np, mes
                                                   p_dir_y, p_dir_z, p_dir_x, 
                                                   p_time, p_alive, p_speed, fis_count, nu_new_neutrons, 
                                                   fission_event_index, num_part, particle_speed, rands, clever_out))
+        print(sum(p_alive[0:num_part]))  
         num_part += clever_out[0]
         # print("")
         # print("max index {0}".format(num_part))
@@ -288,7 +291,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec_np, mesh_scat_xsec_np, mes
         pk.execute(pk.ExecutionSpace.Default, kernels.BringOutYourDead(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, 
                                                    p_dir_y, p_dir_z, p_dir_x, p_speed, 
                                                    p_time, p_alive, num_part, clever_out))
-                                                   
+        print(sum(p_alive[0:num_part]))         
         num_part = clever_out[0]
         alive = num_part
                           

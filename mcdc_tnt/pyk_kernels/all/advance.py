@@ -187,11 +187,11 @@ class StillIn:
         tally_right: int = 0
         for i in range(self.num_part):
             #exit at left
-            if self.p_pos_x[i] <= self.surface_distances[0]:
+            if self.p_pos_x[i] <= 0:
                 tally_left += 1
                 self.p_alive[i] = 0
                 
-            elif self.p_pos_x[i] >= self.surface_distances[-1]:
+            elif self.p_pos_x[i] >= 1:
                 tally_right += 1
                 self.p_alive[i] = 0
         
