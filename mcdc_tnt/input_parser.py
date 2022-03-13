@@ -35,7 +35,7 @@ def SimulationSetup(input_file):
     #===============================================================================
     
     Length_slab = np.float(inputs['length of slab'])
-    surface_distances = np.array(inputs['surface locations'])
+    surface_distances = np.array(inputs['surface locations'], dtype=float)
     
     mesh_cell_length = np.float(inputs['dx']) #dx
     N_mesh = int(Length_slab/mesh_cell_length)
@@ -56,10 +56,10 @@ def SimulationSetup(input_file):
     
     if (amm == True):
         #establishing mesh
-        mesh_scat_xsec = np.zeros(N_mesh, dtype=np.float32)
-        mesh_cap_xsec = np.zeros(N_mesh, dtype=np.float32)
-        mesh_fis_xsec = np.zeros(N_mesh, dtype=np.float32)
-        mesh_total_xsec = np.zeros(N_mesh, dtype=np.float32)
+        mesh_scat_xsec = np.zeros(N_mesh, dtype=float)
+        mesh_cap_xsec = np.zeros(N_mesh, dtype=float)
+        mesh_fis_xsec = np.zeros(N_mesh, dtype=float)
+        mesh_total_xsec = np.zeros(N_mesh, dtype=float)
 
         for cell in range(N_mesh):
             mesh_scat_xsec[cell] = scat_xsec

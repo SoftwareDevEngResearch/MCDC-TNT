@@ -11,7 +11,7 @@ import math
 #import numba as nb
 
 @pk.workload
-class Source_Particles:
+class SourceParticles:
     def __init__(self, p_pos_x, p_pos_y, p_pos_z,
                 p_mesh_cell, dx,
                 p_dir_y, p_dir_z, p_dir_x,

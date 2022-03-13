@@ -2,8 +2,8 @@ import numpy as np
 #import numba as nb
 
 #import pp_kernels as kernels
-import numba_kernels.cpu as kernels
-#import pyk_kernels as kernels
+#import numba_kernels.cpu as kernels
+import pyk_kernels.ad_o as kernels
 #===============================================================================
 # Simulation Setup
 #===============================================================================
@@ -71,8 +71,8 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         mesh_fis_xsec[cell] = mesh_fis_xsec[cell] / mesh_total_xsec[cell]
         
     meshwise_fission_pdf /= sum(meshwise_fission_pdf)
-    mesh_dist_traveled = np.zeros(N_mesh, dtype=np.float32)
-    mesh_dist_traveled_squared = np.zeros(N_mesh, dtype=np.float32)
+    mesh_dist_traveled = np.zeros(N_mesh, dtype=float)
+    mesh_dist_traveled_squared = np.zeros(N_mesh, dtype=float)
     
     
     #===============================================================================
