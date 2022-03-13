@@ -53,7 +53,7 @@ class BringOutYourDead:
                 # Flags
                 self.p_alive[kept] = self.p_alive[i] 
                 kept +=1
-        pk.printf('>>>>> %d\n particles kept', kept)
+        #pk.printf('>>>>> %d\n particles kept', kept)
         self.clever_out[0] = kept
                 
     #@pk.callback
