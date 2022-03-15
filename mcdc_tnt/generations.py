@@ -1,9 +1,10 @@
 import numpy as np
-#import numba as nb
+from timeit import default_timer as timer
+from warmup import WarmUp
 
-#import pp_kernels as kernels
+import pp_kernels as kernels
 #import numba_kernels.cpu as kernels
-import pyk_kernels.ad_o as kernels
+#import pyk_kernels.ad_o as kernels
 #===============================================================================
 # Simulation Setup
 #===============================================================================
@@ -105,6 +106,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     
     #mesh_particle_index = np.zeros([N_mesh, phase_parts], dtype=np.uint8)
     
+    WarmUp()
     
     scatter_event_index = np.zeros(phase_parts, dtype=int)
     capture_event_index = np.zeros(phase_parts, dtype=int)
@@ -135,6 +137,8 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         print("===============================================================================")
         print("particles alive at start of event cycle {0}".format(num_part))
         
+        start_o = timer()
+        
         # print("max index {0}".format(num_part))
         #===============================================================================
         # EVENT 1 : Advance
@@ -142,10 +146,14 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         killed = 0
         alive_cycle_start = num_part
         
+        start = timer()
+        
         [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared] = kernels.Advance(
                 p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time,
                 num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, surface_distances[len(surface_distances)-1])
         
+        end = timer()
+        print('Advance time: {0}'.format(end-start))
         #===============================================================================
         # EVENT 2 : Still in problem
         #===============================================================================
@@ -230,6 +238,9 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
         
         # print(max(p_mesh_cell[0:num_part]))
         g+=1
+        
+        end_o = timer()
+        print('Overall time to completion: {0}'.format(end_o-start_o))
     #===============================================================================
     # Step Output
     #===============================================================================

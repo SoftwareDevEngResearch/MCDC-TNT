@@ -1,4 +1,4 @@
-import generations_pyk as generations
+import generations as generations
 from input_parser import SimulationSetup
 #import matplotlib.pyplot as plt
 import numpy as np

@@ -1,7 +1,7 @@
 
 
 name: 'absorbing_slab'
-number of particles: 1e6
+number of particles: 1e8
 rng seed: 777
 particle speed: 1
 neutrons per fission: 2
