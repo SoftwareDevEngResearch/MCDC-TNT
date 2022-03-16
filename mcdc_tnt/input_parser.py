@@ -54,6 +54,11 @@ def SimulationSetup(input_file):
     #assemble mesh
     amm = inputs['assemble mesh']
     
+    p_warmup = inputs['print warmup times']
+    plot_flux = inputs['flux plot']
+    plot_error = inputs['error plot']
+    
+    
     if (amm == True):
         #establishing mesh
         mesh_scat_xsec = np.zeros(N_mesh, dtype=float)
@@ -67,11 +72,17 @@ def SimulationSetup(input_file):
             mesh_fis_xsec[cell] = fis_xsec
             mesh_total_xsec[cell] = total_xsec
     else:
-        print('import mesh from file')
+        print('import mesh data from file')
         #import mesh from file
     
     #assemble formatted dicts for simplified i/o
-    comp_parms = {'seed': seed, 'hard_targ': hardware_target}
+    comp_parms = {'seed': seed,
+                  'hard_targ': hardware_target,
+                  'p_warmup': p_warmup,
+                  'plot flux': plot_flux,
+                  'plot error': plot_error,
+                  'sim name': sim_name}
+                  
     sim_perams = {'num': num_part,
                   'L_slab': Length_slab,
                   'dx': mesh_cell_length,

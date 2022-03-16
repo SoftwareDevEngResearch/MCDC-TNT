@@ -2,7 +2,7 @@ import numba_kernels.cpu as kernels
 import numpy as np
 from timeit import default_timer as timer
 
-def WarmUp():
+def WarmUp(print_q):
     
     N_mesh = 2
     nu_new_neutrons = 2
@@ -78,8 +78,7 @@ def WarmUp():
                                                       num_part, meshwise_fission_pdf,
                                                       particle_speed, True)
     end = timer()
-    print("Source:  {0}".format(end-start))
-    print()
+    time_source = end-start
     
     start = timer()
     [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared] = kernels.Advance(
@@ -87,8 +86,7 @@ def WarmUp():
                 num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, surface_distances[-1])
                 
     end = timer()
-    print("Advance:  {0}".format(end-start))
-    print()
+    time_ad = end-start
     start = timer()
     
     [scatter_event_index, scat_count, capture_event_index, cap_count, fission_event_index, fis_count] = kernels.SampleEvent(
@@ -96,23 +94,20 @@ def WarmUp():
                 capture_event_index, fission_event_index, num_part, nu_new_neutrons, rands)
     
     end = timer()
-    print("Sample:  {0}".format(end-start))
-    print()
+    time_sample = end-start
     start = timer()
     
     [p_alive, tally_left_t, tally_right_t] = kernels.StillIn(p_pos_x, surface_distances, p_alive, num_part)
     
     end = timer()
-    print("StillIn:  {0}".format(end-start))
-    print()
+    time_stillin = end-start
     start = timer()
     
     scat_count = 0 
     [p_dir_x, p_dir_y, p_dir_z] = kernels.Scatter(scatter_event_index, scat_count, p_dir_x, p_dir_y, p_dir_z, rands)
     
     end = timer()
-    print("Scatter:  {0}".format(end-start))
-    print()
+    time_scatter = end-start
     start = timer()
     
     fis_count = 0
@@ -123,20 +118,34 @@ def WarmUp():
                                                   fission_event_index, num_part, particle_speed, rands)
     
     end = timer()
-    print("Clean:  {0}".format(end-start))
-    print()
+    time_fission = end-start
     
     [p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, 
          p_time, p_alive, kept] = kernels.BringOutYourDead(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, 
                                                    p_dir_y, p_dir_z, p_dir_x, p_speed, 
                                                    p_time, p_alive, num_part)
     
+    end = timer()
+    time_BOYD = end-start
     
     end_o = timer()
+    time_overall = end-start
     
-    return(end_o-start_o)
+    if print_q == True:
+        print()
+        print('>>>>PRINTING WARMUP TIMES<<<<')
+        print('=============================')
+        print("Source........{0}".format(time_source))
+        print("Advance.......{0}".format(time_ad))
+        print("Sample........{0}".format(time_sample))
+        print("Still in......{0}".format(time_stillin))
+        print("scatter.......{0}".format(time_scatter))
+        print("fission.......{0}".format(time_fission))
+        print("BOYD..........{0}".format(time_BOYD))
+        print()
+        print("Overall.......{0}".format(time_overall))
+        print()
+        
     
 if __name__ == '__main__':
-    time = WarmUp()
-    
-    print(time)
+    WarmUp()

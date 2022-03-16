@@ -20,7 +20,7 @@ capture cross section: 0.333
 scatter cross section: 0.333
 fission cross section: 0.333
 
-hardware target: pp
+hardware target: pp #pp /nb_cpu / pyk_cpu
 
 assemble mesh: True
 

@@ -41,19 +41,9 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
                 
             if p_end_trans[i] == 0:
                 end_flag = 0
-        
-        #if (cycle_count > int(1e6)):
-        #    print("************ERROR**********")
-        #    print(" Max itter hit")
-        #    print(p_end_trans)
-        #    print()
-        #    print()
-        #    return()
             
         summer = p_end_trans.sum()
         cycle_count += 1
-        #print("Advance Complete:......{1}%       ".format(cycle_count, int(100*summer/num_part)), end = "\r")
-    #print()
     
     
     return(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared)
@@ -111,9 +101,9 @@ def Advance_cycle(p_pos_x, p_pos_y, p_pos_z,
                 p_end_trans = 1
                 cell_next = p_mesh_cell
                 
-            p_pos_x += p_dir_x*p_dist_travled
-            p_pos_y += p_dir_y*p_dist_travled
-            p_pos_z += p_dir_z*p_dist_travled
+            p_pos_x = p_pos_x+p_dir_x*p_dist_travled
+            p_pos_y = p_pos_y+p_dir_y*p_dist_travled
+            p_pos_z = p_pos_z+p_dir_z*p_dist_travled
             
             p_mesh_cell = cell_next
             p_time  += p_dist_travled/p_speed
@@ -121,8 +111,7 @@ def Advance_cycle(p_pos_x, p_pos_y, p_pos_z,
 
 
 
-
-
+@nb.jit(nopython=True) 
 def StillIn(p_pos_x, surface_distances, p_alive, num_part):
     tally_left = 0
     tally_right = 0

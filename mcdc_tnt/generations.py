@@ -2,7 +2,7 @@ import numpy as np
 from timeit import default_timer as timer
 from warmup import WarmUp
 
-import pp_kernels as kernels
+
 #import numba_kernels.cpu as kernels
 #import pyk_kernels.ad_o as kernels
 #===============================================================================
@@ -18,7 +18,7 @@ import pp_kernels as kernels
 #@nb.jit(nopython=True)
 def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, mesh_total_xsec, surface_distances):
     """
-    Runs a generation of transport. Eachone is launched in complete isolation of
+    Runs a generation of transport. Each one is launched in complete isolation of
     another
 
     Parameters
@@ -43,8 +43,17 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     scalar flux and assocated errors.
 
     """
-    #import_case(comp_parms['hard_targ'])
     
+    if comp_parms['hard_targ'] == 'pp':
+        import pp_kernels as kernels
+        
+    elif comp_parms['hard_targ'] == 'nb_cpu':
+        import numba_kernels.cpu as kernels
+        WarmUp(comp_parms['p_warmup']) #warmup kernels
+        
+    elif comp_parms['hard_targ'] == 'nb_gpu':
+        import numba_kernels.gpu as kernels
+        WarmUp(comp_parms['p_warmup']) #warmup kernels
     
     N_mesh = sim_perams['N_mesh']
     nu_new_neutrons = sim_perams['nu']
@@ -106,7 +115,6 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     
     #mesh_particle_index = np.zeros([N_mesh, phase_parts], dtype=np.uint8)
     
-    WarmUp()
     
     scatter_event_index = np.zeros(phase_parts, dtype=int)
     capture_event_index = np.zeros(phase_parts, dtype=int)
@@ -126,7 +134,7 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     # Generation Loop
     #===============================================================================
     trans = 0
-    g = 0
+    g = 1
     alive = num_part
     trans_lhs = 0
     trans_rhs = 0
