@@ -25,8 +25,7 @@ scatter cross section: 0.333
 fission cross section: 0.333
 mesh file: mesh_data.csv
 
-output: False
-output_file: output_tc1.txt
+file output: True
 
 error plot: True
 flux plot: True

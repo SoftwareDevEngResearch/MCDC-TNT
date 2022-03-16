@@ -48,6 +48,8 @@ def SimulationSetup(input_file):
     
     sim_name = inputs['name']
     
+    make_out = inputs['file output']
+    
     #abs_xsec = cap_xsec+fis_xsec #absorption crossection
     total_xsec = cap_xsec + scat_xsec + fis_xsec #total crossection
     
@@ -81,7 +83,8 @@ def SimulationSetup(input_file):
                   'p_warmup': p_warmup,
                   'plot flux': plot_flux,
                   'plot error': plot_error,
-                  'sim name': sim_name}
+                  'sim name': sim_name,
+                  'output file': make_out}
                   
     sim_perams = {'num': num_part,
                   'L_slab': Length_slab,

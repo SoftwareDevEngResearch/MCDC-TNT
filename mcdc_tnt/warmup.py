@@ -129,7 +129,7 @@ def WarmUp(print_q):
     time_BOYD = end-start
     
     end_o = timer()
-    time_overall = end-start
+    time_overall = end_o-start_o
     
     if print_q == True:
         print()

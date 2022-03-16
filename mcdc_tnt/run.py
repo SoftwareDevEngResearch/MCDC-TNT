@@ -53,13 +53,27 @@ def run():
     print()
     
     [scalar_flux, standard_deviation_flux] = generations.Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, mesh_total_xsec, surface_distances)
-
-    if (output_file == None):
-        print("Simulation Complete, no outputs")
-
+    print()
+    print('Simulation complete')
+    print()
+    
     x_mesh = np.linspace(0,1,len(scalar_flux))
 
     scalar_flux /= np.max(scalar_flux)
+    
+    
+    if comp_parms['output file'] == True:
+        if (output_file == None):
+           output_file = 'output.txt'
+        with open(output_file, 'w') as f:
+            print(comp_parms['sim name'],' output file', file=f)
+            print('cell, center x, normalized scalar flux, associated error', file=f)
+            for i in range(len(scalar_flux)):
+                print('{0},{1},{2},{3}'.format(i, x_mesh[i], scalar_flux[i], standard_deviation_flux[i]), file=f) 
+        print('Output written to',output_file)
+        print()
+    else:
+        print('No file outputs requested, Simulation Complete')
     
     
     if comp_parms['plot error'] == True:
@@ -70,6 +84,8 @@ def run():
         plt.ylabel("$σ^2$")
         plt.xlabel("x [cm]")
         plt.savefig('error.png', dpi=500, facecolor='w', edgecolor='k',orientation='portrait')
+        print('Error figure printed to error.png')
+        print()
         
     if comp_parms['plot flux'] == True:
         import matplotlib.pyplot as plt
@@ -78,7 +94,11 @@ def run():
         plt.title(["Scalar Flux: ",comp_parms['sim name']])
         plt.ylabel("$\phi [cm^{-2}s^{-1}]$")
         plt.xlabel("x [cm]")
-        plt.savefig('sflux.png', dpi=500, facecolor='w', edgecolor='k',orientation='portrait')
-
+        plt.savefig('sflux.png', dpi=500, facecolor='w', edgecolor='k',orientation='portrait')  
+        print('Flux figure printed to sflux.png')
+        print()
+        
+    
+    
 if __name__ == "__main__":
     run()

@@ -1,7 +1,5 @@
 import numpy as np
-#import numba as nb
 import pykokkos as pk
-
 import pyk_kernels.all as kernels
 
 #===============================================================================
@@ -14,7 +12,6 @@ import pyk_kernels.all as kernels
 # EVENT 0 : Sample particle source
 #===============================================================================
 
-#@nb.jit(nopython=True)
 def Generations(comp_parms, sim_perams, mesh_cap_xsec_np, mesh_scat_xsec_np, mesh_fis_xsec_np, mesh_total_xsec_np, surface_distances_np):
     """
     Runs a generation of transport. Eachone is launched in complete isolation of
