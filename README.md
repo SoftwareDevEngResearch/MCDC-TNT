@@ -1,16 +1,20 @@
 # MCDC-TNT
 Monte Carlo Deterministic Code - Transient Neutronics Testbed
 
-To install clone then use command `pip install --user -e .` in project directory.
 
-To run a simple initial integration test run `python run.py -i tc_1.yaml` in mcdc_tnt.
-
-To run a hardware test suit go to `tests/integration` and run `python test_hardware.py`
+## Quick Set-Up
+1. From a terminal with conda installed set up a conda enviroment with `conda create -n mcdc_tnt numba matplotlib pyyaml pytest` which will install all package dependecies for the Numba and Pure Python implementations
+2. run `conda activate mcdc_tnt`
+3. Clone this github 
+4. Run `pip install --user -e .` in project directory to install mcdc_tnt as a local package.
+5. Run unit test suite for pure Python and Numba kernels by moving to `tests/` directory and running `pytest` (note that unit test coverage will read as very small as test suites for both implementaitons of pykokkos and pyomp have been removed but the kernels are still there)
+6. Run an integration test suite with validation by moving to to `integration/` and running `python test_hardaware.py`. This could take a while as a pure Python implementaion is slow
+7. To interface with pacakge directly from command line navigate to package directory `mcdc_tnt/` and run `python run.py -i tc_1.yaml -o output.out -t nb_cpu` to run a test problem using the numba protocols. Can also be ran with `-t pp` for pure python implimentations
 
 ## Grading Notes:
-1. **Installation:** This package only currently installs using local source files. It's requirements for Numba CPU functionality are Numba, Numpy, Matplotlib, and Pyyaml. Note that due to Numba and Pyomp conflicting Pyomp is not interface able in this program without changing the __init__ file in numba.cpu.
+1. **Installation:** This package only currently installs using local source files. It's requirements for Numba CPU functionality are Numba, Numpy, Matplotlib, and Pyyaml. Note that due to Numba and Pyomp conflicting Pyomp is not interfaceable in this program without changing the __init__ file in `numba/cpu`.
 2. **Documentation:** A sphinx cite is linked in this git hub
-3. **Testing:** I do note expect anyone to go through the laborious task of setting up a pykokkos implementation to grade this work. As such I have removed the test files for it so that. This coupled with a lack of tests for the Numba GPU implementation makes my test coverage abysmal. Please take this into consideration and that the numba CPU kernels and pure python kernels have decent test coverage
+3. **Testing:** I do not expect anyone to go through the laborious task of setting up a pykokkos implementation to grade this work. As such I have removed the test files for it so that. This coupled with a lack of tests for the Numba GPU implementation makes my test coverage abysmal. Please take this into consideration and that the numba CPU kernels and pure python kernels have decent test coverage
 4. **Examples:** An example test suite is listed to provide the same test case working across multiple pieces of hardware
 5. **License:** Is included in this directory
 6. **Interface:** Runs with the commands provided in this README
@@ -58,11 +62,11 @@ flux plot: True        #produce the flux plot?
 Then to run a simulation it can be done from a python file using:
 ```
 import mcdc_tnt
-mcdc_tnt.run('input.yaml','output.out')
+mcdc_tnt.run('input.yaml','output.out','hardware_target')
 ```
 
 or from the command line in the mcdc_tnt directory with:
-`python run.py -i input.yaml -o output.out`
+`python run.py -i input.yaml -o output.out -t 'hardware_target'`
 
 
 ## Acknowledgment
