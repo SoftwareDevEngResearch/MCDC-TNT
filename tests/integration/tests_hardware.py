@@ -36,7 +36,7 @@ if __name__ == '__main__':
     print('Entering Numba CPU')   
 
     input_file = 'tc_1_numba_cpu.yaml'
-    output_file = 'numba_cpu_pyomp.out'
+    output_file = 'numba_cpu.out'
     start = timer()
     mcdc_tnt.run(input_file, output_file, None)
     end = timer()
@@ -72,7 +72,7 @@ if __name__ == '__main__':
     #sf_pykc = np.loadtxt('pyk_cpu.out', comments='#', delimiter=',', skiprows=2) 
     
     
-    assert(np.allclose(sf_actual[:,2], sf_pp[:,2], rtol=1e-04))
+    assert(np.allclose(sf_actual[:,2], sf_pp[:,2], rtol=1e-01))
     assert(np.allclose(sf_actual[:,2], sf_nbc[:,2], rtol=1e-01))
     #assert(np.allclose(sf_actual[:,2], sf_nbg[:,2]))
     #assert(np.allclose(sf_actual[:,2], sf_pykc[:,2], rtol=1e-01))
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     #print('     -numba gpu.......{0}'.format(time_nbg))
     #print('     -pykokkos cpu....{0}'.format(time_pykc))
     print()
-    print('     -total...........{0}'.format(start_o-end_o))
+    print('     -total...........{0}'.format(end_o-start_o))
     print()
     print('Produced Errors Between Soultions')
     print('     -pure python............{0}'.format(error(sf_actual, sf_pp)))
@@ -98,8 +98,8 @@ if __name__ == '__main__':
     plt.figure(1)
     f = plt.plot(sf_actual[:,1], sf_actual[:,2], '-b',
              sf_pp[:,1], sf_pp[:,2], '-r',
-             sf_nbc[:,1], sf_nbc[:,2], 'g-',
-             sf_pykc[:,1], sf_pykc[:,2], 'k-')
+             sf_nbc[:,1], sf_nbc[:,2], 'g-')
+
     plt.title("Scalar Flux")
     plt.ylabel("$\phi [cm^{-2}s^{-1}]$")
     plt.xlabel("x [cm]")
@@ -107,7 +107,7 @@ if __name__ == '__main__':
     plt.savefig('sflux.png', dpi=500, facecolor='w', edgecolor='k',orientation='portrait')  
     print('Flux figure printed to sflux.png')
     print()
-    
+    #sf_pykc[:,1], sf_pykc[:,2], 'k-')
     print()
     
     

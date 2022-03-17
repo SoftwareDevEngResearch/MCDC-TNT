@@ -57,7 +57,7 @@ def run(input_file, output_file=None, hard_targ=None):
     
     if comp_parms['output file'] == True:
         if (output_file == None):
-           output_file = 'output.txt'
+           output_file = 'output.out'
         with open(output_file, 'w') as f:
             print(comp_parms['sim name'],'output file', file=f)
             print('cell, center x, normalized scalar flux, associated error', file=f)
