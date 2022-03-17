@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Outputs
+*.png
+*.out
+
 #pykokkos directory trees with compiled files
 pk_cpp/
 

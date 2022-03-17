@@ -197,9 +197,50 @@ class StillIn:
         
         self.clever_out[0] = tally_left
         self.clever_out[1] = tally_right
+
+def speedTestAdvance():
+    # Position
+    num_part = int(1e8)
+    phase_parts = num_parts
+    
+    p_pos_x_np = np.zeros(phase_parts, dtype=float)
+    p_pos_y_np = np.zeros(phase_parts, dtype=float)
+    p_pos_z_np = np.zeros(phase_parts, dtype=float)
+    
+    p_pos_x = pk.from_numpy(p_pos_x_np)
+    p_pos_y = pk.from_numpy(p_pos_y_np)
+    p_pos_z = pk.from_numpy(p_pos_z_np)
+    
+    # Direction
+    p_dir_x_np = np.zeros(phase_parts, dtype=float)
+    p_dir_y_np = np.zeros(phase_parts, dtype=float)
+    p_dir_z_np = np.zeros(phase_parts, dtype=float)
+    
+    p_dir_x = pk.from_numpy(p_dir_x_np)
+    p_dir_y = pk.from_numpy(p_dir_y_np)
+    p_dir_z = pk.from_numpy(p_dir_z_np)
+    
+    # Speed
+    p_speed_np = np.zeros(phase_parts, dtype=float)
+    p_speed = pk.from_numpy(p_speed_np)
+    
+    # Time
+    p_time_np = np.zeros(phase_parts, dtype=float)
+    p_time = pk.from_numpy(p_time_np)
+    
+    # Region
+    p_mesh_cell_np = np.zeros(phase_parts, dtype=np.int32)
+    p_mesh_cell = pk.from_numpy(p_mesh_cell_np)
+    
+    # Flags
+    p_alive_np = np.full(phase_parts, False, dtype=np.int32)
+    p_alive = pk.from_numpy(p_alive_np)
     
     
+    kernels.Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, num_part, mesh_total_xsec, mesh_dist_traveled, mesh_dist_traveled_squared, surface_distances[len(surface_distances)-1])
     
+    
+"""   
 def test_Advance():
     L = 1
     dx = .25
@@ -237,7 +278,7 @@ def test_Advance():
     assert (p_pos_x[0]  == -.01)
     assert (p_pos_x[5]  == 1.1)
     assert (p_pos_x[1:4].all()  > .75)
-    
+"""
     
         
 def test_StillIn():    
@@ -257,5 +298,4 @@ def test_StillIn():
 
 
 if __name__ == '__main__':
-    test_Advance()
-    test_StillIn()
+    speedTestAdvance()

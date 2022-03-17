@@ -45,19 +45,9 @@ def Advance(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, dx, p_dir_y, p_dir_z, p_dir_
                 
             if p_end_trans[i] == 0:
                 end_flag = 0
-        
-        #if (cycle_count > int(1e6)):
-        #    print("************ERROR**********")
-        #    print(" Max itter hit")
-        #    print(p_end_trans)
-        #    print()
-        #    print()
-        #    return()
             
         summer = p_end_trans.sum()
         cycle_count += 1
-        #print("Advance Complete:......{0}%     (c: {1})       ".format(cycle_count, int(100*summer/num_part), cycle_count), end = "\r")
-    #print()
     
     
     return(p_pos_x, p_pos_y, p_pos_z, p_mesh_cell, p_dir_y, p_dir_z, p_dir_x, p_speed, p_time, mesh_dist_traveled, mesh_dist_traveled_squared)
