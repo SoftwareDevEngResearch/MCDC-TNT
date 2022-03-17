@@ -3,19 +3,23 @@ import math
 import mcdc_tnt
 from timeit import default_timer as timer
 
+def error(sim, bench):
+    error = np.linalg.norm(sim - bench) / np.linalg.norm(bench)
+    return(error)
+
 if __name__ == '__main__':
     
     print()
     print('ATTENTION')
     print('Entering Hardware Test Suite')
     print('Ensure the proper conda enviorment is enabled')
-    print('Test Schedule ([x] will run, [c] can run if dependiencies):')
+    print('Test Schedule ([x] will run, [c] can run (must be manually set)):')
     print('     -[x] pure python')
     print('     -[x] numba cpu')
-    print('     -[c] numba gpu')
+    print('     -[ ] numba gpu')
     print('     -[c] pykokkos cpu')
     print('     -[ ] pykokkos gpu')
-    print('     -[ ] pyomp cpu')
+    print('     -[c] pyomp cpu')
     print('This can take a while, recomended Pytest is not used')
     print()
     start_o = timer()
@@ -24,7 +28,7 @@ if __name__ == '__main__':
     input_file = 'tc_1_pp.yaml'
     output_file = 'pp.out'
     start = timer()
-    mcdc_tnt.run(input_file, output_file)
+    mcdc_tnt.run(input_file, output_file, None)
     end = timer()
     time_pp = end-start
     
@@ -32,9 +36,9 @@ if __name__ == '__main__':
     print('Entering Numba CPU')   
 
     input_file = 'tc_1_numba_cpu.yaml'
-    output_file = 'numba_cpu.out'
+    output_file = 'numba_cpu_pyomp.out'
     start = timer()
-    mcdc_tnt.run(input_file, output_file)
+    mcdc_tnt.run(input_file, output_file, None)
     end = timer()
     time_nbc = end-start
     
@@ -82,6 +86,12 @@ if __name__ == '__main__':
     #print('     -pykokkos cpu....{0}'.format(time_pykc))
     print()
     print('     -total...........{0}'.format(start_o-end_o))
+    print()
+    print('Produced Errors Between Soultions')
+    print('     -pure python............{0}'.format(error(sf_actual, sf_pp)))
+    print('     -numba threading........{0}'.format(error(sf_actual, sf_nbc)))
+    #print('     -numba pyomp............{0}'.format(error(sf_actual, sf_pyomp)))
+    #print('     -pyk ompenmp............{0}'.format(error(sf_actual, sf_pykc)))
     print()
     
     import matplotlib.pyplot as plt

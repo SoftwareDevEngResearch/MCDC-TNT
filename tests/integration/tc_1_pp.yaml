@@ -2,7 +2,7 @@
 
 name: 'fissioning_slab numba_cpu'
 number of particles: 1e5
-rng seed: 777
+rng seed: 77546
 particle speed: 1
 neutrons per fission: 2
 isotropic: Ture

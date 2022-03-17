@@ -4,7 +4,7 @@ import sys
 import argparse
 import mcdc_tnt
 
-def run(input_file, output_file):
+def run(input_file, output_file=None, hard_targ=None):
     """
     main function to run a single generation and plot the output
 
@@ -13,8 +13,12 @@ def run(input_file, output_file):
     Plots and output tables if requested.
 
     """
-
+    
     [comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, mesh_total_xsec, surface_distances] = mcdc_tnt.SimulationSetup(input_file)
+    
+    if hard_targ != None:
+         comp_parms['hard_targ'] = hard_targ
+    
     
     if comp_parms['hard_targ'] == 'pp':
         from mcdc_tnt.generations import Generations
@@ -95,10 +99,12 @@ if __name__ == "__main__":
                         help='input file in a .yaml format (see InputDeck.py)')
     parser.add_argument('-o', '--output', required=False,
                         help='output file, if none then output.txt')
-                        
+    parser.add_argument('-t', '--target', required=False,
+                        help='hardware target, if none then use one listed in input.yaml (pp = pure python, nb_cpu = numba cpu)')
     args = parser.parse_args(sys.argv[1:])
 
     input_file = args.input
     output_file = args.output
+    hard_targ = args.target
 
-    run(input_file, output_file)
+    run(input_file, output_file, hard_targ)
