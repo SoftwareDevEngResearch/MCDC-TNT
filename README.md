@@ -8,7 +8,7 @@ To run a simple intial initegration test run `python run.py -i tc_1.yaml` in mcd
 To run a hardware test suit go to `tests/integration` and run `python test_hardware.py`
 
 ## Grading Notes:
-1. **Installation:** This package only currenlty instals using local source files. It's reqirements for Numba CPU funcitonality are Numba, Numpy, Matplotlib, and Pyyaml
+1. **Installation:** This package only currenlty instals using local source files. It's reqirements for Numba CPU funcitonality are Numba, Numpy, Matplotlib, and Pyyaml. Note that due to Numba and Pyomp conflicting Pyomp is not inteerface able in this program without changing the __init__ file in numba.cpu.
 2. **Documentation:** A sphinx cite is linked in this git hub
 3. **Testing:** I do note expect anyone to go throuhg the laborious task of setting up a pykokkos implementation to grade this work. As such I have removed the test files for it so that. This coupled with a lack of tests for the Numba GPU implementation makes my test coverage absmul. Please take this into consideration and that the numba CPU kernels and pure python kernels have decent test coverage
 4. **Examples:** An example test suiet is listed to provide the same test case working accrose multiple pices of hardware
