@@ -1,7 +1,6 @@
-import mcdc_tnt.pp_kernels as kernels
+import mcdc_tnt.numba_kernels.cpu as kernels
 import numpy as np
 import math
-#class test_pp_kernels:
   
     
 def test_SourceParticles():
@@ -72,9 +71,10 @@ def test_SampleEvent():
 def test_StillIn():    
     
     num_part = 7
-    surface_distances = [0,.25,.75,1]
-    p_pos_x = np.array([-.01, 0, .1544, .2257, .75, 1.1, 1])
+    surface_distances = np.array([0,.25,.75,1], dtype=float)
+    p_pos_x = np.array([-.01, 0, .1544, .2257, .75, 1.1, 1], dtype=float)
     p_alive = np.ones(num_part, bool)
+    print('Hello!!!!!')
     
     [p_alive, tally_left, tally_right] = kernels.StillIn(p_pos_x, surface_distances, p_alive, num_part)
     

@@ -8,7 +8,7 @@ __pycache__/
 
 # Outputs
 *.png
-*.output
+*.out
 
 #pykokkos directory trees with compiled files
 pk_cpp/

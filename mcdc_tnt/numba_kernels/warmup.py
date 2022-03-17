@@ -1,4 +1,4 @@
-import numba_kernels.cpu as kernels
+import mcdc_tnt.numba_kernels.cpu as kernels
 import numpy as np
 from timeit import default_timer as timer
 

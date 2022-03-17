@@ -1,11 +1,10 @@
-from input_parser import SimulationSetup
-#import matplotlib.pyplot as plt
+#from .input_parser import SimulationSetup
 import numpy as np
 import sys
 import argparse
+import mcdc_tnt
 
-
-def run():
+def run(input_file, output_file):
     """
     main function to run a single generation and plot the output
 
@@ -14,35 +13,25 @@ def run():
     Plots and output tables if requested.
 
     """
-    parser = argparse.ArgumentParser(description='Main file to run MC/DC-TNT')
-    parser.add_argument('-i', '--input', required=True,
-                        help='input file in a .yaml format (see InputDeck.py)')
-    parser.add_argument('-o', '--output', required=False,
-                        help='output file, if none then output.txt')
-                        
-    args = parser.parse_args(sys.argv[1:])
 
-    input_file = args.input
-    output_file = args.output
-
-    [comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, mesh_total_xsec, surface_distances] = SimulationSetup(input_file)
+    [comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, mesh_total_xsec, surface_distances] = mcdc_tnt.SimulationSetup(input_file)
     
     if comp_parms['hard_targ'] == 'pp':
-        import generations as generations
+        from mcdc_tnt.generations import Generations
         print('>>>Running Prue Python kernels (slow)')
     elif comp_parms['hard_targ'] == 'nb_cpu':
-        import generations as generations
+        from mcdc_tnt.generations import Generations
         print('>>>Running Numba CPU kernels')
     elif comp_parms['hard_targ'] == 'nb_gpu':
-        import generations as generations
+        from mcdc_tnt.generations import Generations
         print('>>>Running Numba GPU kernels (slow)')
     elif comp_parms['hard_targ'] == 'pyk_cpu':
-        import generations_pyk as generations
+        from mcdc_tnt.generations_pyk import Generations
         print('>>>Running PyKokkos CPU kernels')
         print('    ensure correct conda enviroment is loaded!')
     elif comp_parms['hard_targ'] == 'pyk_gpu':
         print('>>>Feature not yet implemented, running pyk cpu kerenels')
-        import generations_pyk as generations
+        from mcdc_tnt.generations_pyk import Generations
         print('>>>Running PyKokkos CPU kernels')
         print('    ensure correct conda enviroment is loaded!')
     else:
@@ -52,7 +41,7 @@ def run():
         return()
     print()
     
-    [scalar_flux, standard_deviation_flux] = generations.Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, mesh_total_xsec, surface_distances)
+    [scalar_flux, standard_deviation_flux] = Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_xsec, mesh_total_xsec, surface_distances)
     print()
     print('Simulation complete')
     print()
@@ -66,7 +55,7 @@ def run():
         if (output_file == None):
            output_file = 'output.txt'
         with open(output_file, 'w') as f:
-            print(comp_parms['sim name'],' output file', file=f)
+            print(comp_parms['sim name'],'output file', file=f)
             print('cell, center x, normalized scalar flux, associated error', file=f)
             for i in range(len(scalar_flux)):
                 print('{0},{1},{2},{3}'.format(i, x_mesh[i], scalar_flux[i], standard_deviation_flux[i]), file=f) 
@@ -101,4 +90,15 @@ def run():
     
     
 if __name__ == "__main__":
-    run()
+    parser = argparse.ArgumentParser(description='Main file to run MC/DC-TNT')
+    parser.add_argument('-i', '--input', required=True,
+                        help='input file in a .yaml format (see InputDeck.py)')
+    parser.add_argument('-o', '--output', required=False,
+                        help='output file, if none then output.txt')
+                        
+    args = parser.parse_args(sys.argv[1:])
+
+    input_file = args.input
+    output_file = args.output
+
+    run(input_file, output_file)

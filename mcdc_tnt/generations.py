@@ -1,6 +1,6 @@
 import numpy as np
 from timeit import default_timer as timer
-from warmup import WarmUp
+
 
 
 #import numba_kernels.cpu as kernels
@@ -45,14 +45,16 @@ def Generations(comp_parms, sim_perams, mesh_cap_xsec, mesh_scat_xsec, mesh_fis_
     """
     
     if comp_parms['hard_targ'] == 'pp':
-        import pp_kernels as kernels
+        import mcdc_tnt.pp_kernels as kernels
         
     elif comp_parms['hard_targ'] == 'nb_cpu':
-        import numba_kernels.cpu as kernels
+        import mcdc_tnt.numba_kernels.cpu as kernels
+        from mcdc_tnt.numba_kernels.warmup import WarmUp
         WarmUp(comp_parms['p_warmup']) #warmup kernels
         
     elif comp_parms['hard_targ'] == 'nb_gpu':
-        import numba_kernels.gpu as kernels
+        import mcdc_tnt.numba_kernels.gpu as kernels
+        from mcdc_tnt.numba_kernels.warmup import WarmUp
         WarmUp(comp_parms['p_warmup']) #warmup kernels
     
     N_mesh = sim_perams['N_mesh']

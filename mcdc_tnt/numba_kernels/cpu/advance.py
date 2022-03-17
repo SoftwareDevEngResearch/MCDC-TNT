@@ -174,7 +174,7 @@ def test_Advance():
 def test_StillIn():    
     
     num_part = 7
-    surface_distances = [0,.25,.75,1]
+    surface_distances = np.array([0,.25,.75,1])
     p_pos_x = np.array([-.01, 0, .1544, .2257, .75, 1.1, 1])
     p_alive = np.ones(num_part, bool)
     
@@ -188,6 +188,6 @@ def test_StillIn():
 
 
 if __name__ == '__main__':
-    test_Advance()
+    #test_Advance()
     test_StillIn()
     

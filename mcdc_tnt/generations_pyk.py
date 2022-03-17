@@ -1,6 +1,6 @@
 import numpy as np
 import pykokkos as pk
-import pyk_kernels.all as kernels
+import mcdc_tnt.pyk_kernels.all as kernels
 
 #===============================================================================
 # Simulation Setup
