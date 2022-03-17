@@ -3,30 +3,30 @@ Monte Carlo Deterministic Code - Transient Neutronics Testbed
 
 To install clone then use command `pip install --user -e .` in project directory.
 
-To run a simple intial initegration test run `python run.py -i tc_1.yaml` in mcdc_tnt.
+To run a simple initial integration test run `python run.py -i tc_1.yaml` in mcdc_tnt.
 
 To run a hardware test suit go to `tests/integration` and run `python test_hardware.py`
 
 ## Grading Notes:
-1. **Installation:** This package only currenlty instals using local source files. It's reqirements for Numba CPU funcitonality are Numba, Numpy, Matplotlib, and Pyyaml. Note that due to Numba and Pyomp conflicting Pyomp is not inteerface able in this program without changing the __init__ file in numba.cpu.
+1. **Installation:** This package only currently installs using local source files. It's requirements for Numba CPU functionality are Numba, Numpy, Matplotlib, and Pyyaml. Note that due to Numba and Pyomp conflicting Pyomp is not interface able in this program without changing the __init__ file in numba.cpu.
 2. **Documentation:** A sphinx cite is linked in this git hub
-3. **Testing:** I do note expect anyone to go throuhg the laborious task of setting up a pykokkos implementation to grade this work. As such I have removed the test files for it so that. This coupled with a lack of tests for the Numba GPU implementation makes my test coverage absmul. Please take this into consideration and that the numba CPU kernels and pure python kernels have decent test coverage
-4. **Examples:** An example test suiet is listed to provide the same test case working accrose multiple pices of hardware
+3. **Testing:** I do note expect anyone to go through the laborious task of setting up a pykokkos implementation to grade this work. As such I have removed the test files for it so that. This coupled with a lack of tests for the Numba GPU implementation makes my test coverage abysmal. Please take this into consideration and that the numba CPU kernels and pure python kernels have decent test coverage
+4. **Examples:** An example test suite is listed to provide the same test case working across multiple pieces of hardware
 5. **License:** Is included in this directory
 6. **Interface:** Runs with the commands provided in this README
 
-# Instilation of PyKokkos
+# Installation of PyKokkos
 While most machines should be able to operate with the OpenMP backend currently on the Lassen Machine can get the CUDA version. To switch to the OpenMP only version change  `-DENABLE_CUDA` from `ON` to `OFF.
 
 1. `git clone` [`pykokkos-base`](https://github.com/kokkos/pykokkos-base) and the develop granch of [`pykokkos`](github.com/kokkos/pykokkos). To do this in the pykokkos directory run `git fetch` then `git checkout develop`
-2. Prep conda enviroment by snagging reqirements listed in reqirements.txt from pykokkos-base and pykokkos. (1. `conda create -n pyk` 2. `conda activate pyk` 3. in pyk-base directory run `conda install --file requirments.txt` 4. in pykokkos directory run `conda install --file requirments.txt`) *ensure that cmake is of version 18 or higher and that gcc/g++ versions are at least 9*
+2. Prep conda environment by snagging requirements listed in requirements.txt from pykokkos-base and pykokkos. (1. `conda create -n pyk` 2. `conda activate pyk` 3. in pyk-base directory run `conda install --file requirments.txt` 4. in pykokkos directory run `conda install --file requirments.txt`) *ensure that cmake is of version 18 or higher and that gcc/g++ versions are at least 9*
 3. Install Pykokkos-base for both OpenMP, and CUDA implementations by running:
 `python setup.py install -- -DCMAKE_CXX_COMPILER=g++ -DENABLE_LAYOUTS=ON -DENABLE_MEMORY_TRAITS=OFF -DENABLE_VIEW_RANKS=3 -DENABLE_CUDA=ON -DENABLE_THREADS=OFF -DENABLE_OPENMP=ON -G "Unix Makefiles" -- -j 4` *this will take upwards of 2 hours to build and will consume a considerable ammount of RAM*
 4. Install pykokkos using `pip install --user -e .`
 5. Run!
 
 ## Interface
-This project is desigend to be interfaced with via the command line and an input.yaml file. An example is listed here:
+This project is designed to be interfaced with via the command line and an input.yaml file. An example is listed here:
 
 ```
 name: 'fissioning_slab'   #name of the simluation (any string)
